@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/cmake_install.cmake",
+		"C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/external/glad/cmake_install.cmake",
+		"C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/external/glfw/cmake_install.cmake",
+		"C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/external/glfw/src/cmake_install.cmake",
+		"C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/external/cglm/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
