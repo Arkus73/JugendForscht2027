@@ -1,6 +1,6 @@
 #version 430 core
 
-layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (rgba32f, binding = 0) uniform image2D imgOutput;
 
 struct Camera {
@@ -40,7 +40,7 @@ struct HitInfo {
 };
 
 uniform Camera cam;
-#define sphereCount 2
+#define sphereCount 1
 uniform Sphere spheres[sphereCount];
 uniform vec2 imageSize;
 uniform int randSeed;
@@ -156,7 +156,9 @@ vec3 traceRay(Ray ray, inout uint secondSeed) {
             ray.origin = hitInfo.hitPoint + hitInfo.normal * 0.001f;
 
             vec3 newDir = vec3(1.0, 1.0, 1.0);
-            while(newDir == vec3(1.0, 1.0, 1.0)) {
+            int safetyLimit = 50;
+            int counter = 0;
+            while(newDir == vec3(1.0, 1.0, 1.0) && counter < safetyLimit) {
                 float x = randf(secondSeed) * 2 - 1;
                 float y = randf(secondSeed) * 2 - 1;
                 float z = randf(secondSeed) * 2 - 1;
@@ -164,8 +166,13 @@ vec3 traceRay(Ray ray, inout uint secondSeed) {
                 if(x * x + y * y + z * z <= 1) {
                     newDir = normalize(vec3(x, y, z));
                 }
+                counter++;
             }
-            
+
+            if(counter >= safetyLimit) {
+                newDir = reflect(newDir, hitInfo.normal);
+            }
+
             // Zeigt die neue Richtung ins Innere der Sphäre, wird sie umgekehrt
             if(dot(newDir, hitInfo.normal) < 0) {
                 newDir *= -1;

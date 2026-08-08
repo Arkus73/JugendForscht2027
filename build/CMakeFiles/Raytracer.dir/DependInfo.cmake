@@ -10,8 +10,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.c" "CMakeFiles/Raytracer.dir/src/camera.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/camera.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/main.c" "CMakeFiles/Raytracer.dir/src/main.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/main.c.obj.d"
+  "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/material.c" "CMakeFiles/Raytracer.dir/src/material.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/material.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.c" "CMakeFiles/Raytracer.dir/src/shader.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/shader.c.obj.d"
+  "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/sphere.c" "CMakeFiles/Raytracer.dir/src/sphere.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/sphere.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/stb_image.c" "CMakeFiles/Raytracer.dir/src/stb_image.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/stb_image.c.obj.d"
+  "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/stb_image_write.c" "CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.c" "CMakeFiles/Raytracer.dir/src/utils.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/utils.c.obj.d"
   )
 

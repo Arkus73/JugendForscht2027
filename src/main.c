@@ -4,15 +4,17 @@
 
 #include "shader.h"
 #include "sphere.h"
+#include "stb_image_write.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include "utils.h"
 
-#define WINDOW_HEIGHT 480
-#define WINDOW_WIDTH WINDOW_HEIGHT * ASPECT_RATIO
+#define WINDOW_HEIGHT 1000
+#define WINDOW_WIDTH (WINDOW_HEIGHT * ASPECT_RATIO)
 
-void render(Shader raytracer, unsigned int texture, int frameCount);
+void progressivelyRender(Shader raytracer, unsigned int texture, int avgrRange);
+void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int frameCountPerVideoFrame, int* videoFrameCount, int FPS, float videoLength, GLFWwindow* window);
 
 int main(int argc, char** argv) {
 
@@ -58,31 +60,20 @@ int main(int argc, char** argv) {
     setFloat(raytracer, "cam.focalLength", 1.0f);
     setFloat(raytracer, "cam.aspectRatio", ASPECT_RATIO);
 
-    vec3 camCenter = {3.0f, 0.0f, 5.0f};
+    vec3 camCenter = {0.0f, 0.0f, 10.0f};
     setVec3(raytracer, "cam.center", camCenter);
     mat4 camTransform;
-    glm_lookat(camCenter, (vec3) {2.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
+    glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
     glm_mat4_inv(camTransform, camTransform);
     setMatrix(raytracer, "cam.transform", camTransform);
 
     // Sphären und damit das Aussehen der Welt werden definiert
-    setVec3(raytracer, "spheres[0].center", (vec3) {4.0f, 0.0f, -12.0f});
-    setFloat(raytracer, "spheres[0].radius", 3.0f);
-    setVec3(raytracer, "spheres[0].material.colour", (vec3) {0.0f, 0.0f, 1.0f});
-    setVec3(raytracer, "spheres[0].material.emissionColour", (vec3) {0.0f, 0.0f, 0.0f});
-    setFloat(raytracer, "spheres[0].material.emissionStrength", 0.0);
-
-    vec3 spherePos = {-2.0f, 0.0f, -5.0f};
-    setVec3(raytracer, "spheres[1].center", spherePos);
-    setFloat(raytracer, "spheres[1].radius", 2.0f);
-    setVec3(raytracer, "spheres[1].material.colour", (vec3) {0.0f, 0.0f, 0.0f});
-    setVec3(raytracer, "spheres[1].material.emissionColour", (vec3) {1.0f, 1.0f, 1.0f});
-    setFloat(raytracer, "spheres[1].material.emissionStrength", 8.0);
+    
 
     // Sonstige Uniforms werden festgelegt
     setVec2(raytracer, "imageSize", (vec2) {WINDOW_WIDTH, WINDOW_HEIGHT});
-    setInt(raytracer, "maxBounceCount", 3);
-    setInt(raytracer, "samplesPerPixel", 10);
+    setInt(raytracer, "maxBounceCount", 2);
+    setInt(raytracer, "samplesPerPixel", 50);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -96,7 +87,9 @@ int main(int argc, char** argv) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
 
     float lastFrame = glfwGetTime();
-    int frameCount = 1;
+    int frameCount = 0;
+    int videoFrameCount = 0;
+
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -105,7 +98,7 @@ int main(int argc, char** argv) {
         float delta = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        render(raytracer, texture, frameCount);
+        progressivelyRender(raytracer, texture, frameCount);
         frameCount++;
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
@@ -129,12 +122,45 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
-void render(Shader raytracer, unsigned int texture, int frameCount) {
+//                                                                    v Menge an vorherigen Frames, über die interpoliert werden soll
+void progressivelyRender(Shader raytracer, unsigned int texture, int avgrRange) {
     // Der Frame wird vom Raytracer auf die Textur gerendert
     useShader(raytracer);
-    setInt(raytracer, "randSeed", (int) time(NULL) * (int) glfwGetTime());
-    setInt(raytracer, "frameCount", frameCount);
+    setInt(raytracer, "randSeed", ((int) time(NULL) + 9837457) * ((int) glfwGetTime() - 294915));
+    setInt(raytracer, "frameCount", avgrRange);
     glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);   // Textur wird fürs Writing an Position 0 gebindet
-    glDispatchCompute(WINDOW_WIDTH, WINDOW_HEIGHT, 1);
+    glDispatchCompute((WINDOW_WIDTH + 7) / 8, (WINDOW_HEIGHT + 7) / 8, 1);
     glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);    // Stellt sicher, dass alle Schreiboperationen des Raytracers fertig sind, bevor die Textur wieder ausgelesen wird
+}
+
+//                                                                               v Anzahl der progressivelyRender()-Aufrufe pro Video-Frame
+void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int frameCountPerVideoFrame, int* videoFrameCount, int FPS, float videoLength, GLFWwindow* window) {
+
+    if(*frameCount == frameCountPerVideoFrame) {
+        *frameCount = 0;
+        *videoFrameCount++;
+
+        // Pixel werden aus der Textur extrahiert
+        unsigned char* pixels = malloc((size_t) (WINDOW_WIDTH * WINDOW_HEIGHT * 4));
+        if(pixels == NULL) {
+            throwException("Couldn't allocate memory for pixels");
+        }
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+        // Bild wird in Datei geschrieben
+        char name[30];
+        snprintf(name, 30, "..\\output\\image%03d.png", frameCount);
+        stbi_write_png(name, (int) WINDOW_WIDTH, WINDOW_HEIGHT, 4, pixels, (int) WINDOW_WIDTH * 4);
+        free(pixels);
+
+        // Hier Bewegung einfügen
+        float delta = 1.0 / (int) FPS;
+        float time = *videoFrameCount * delta;
+        
+        // Wurde das letzte Bild gerendert, wird das Programm geschlossen
+        if(*videoFrameCount == (int) (videoLength * FPS)) {
+            glfwSetWindowShouldClose(window, true);
+        }
+    }
 }

@@ -105,6 +105,8 @@ CMakeFiles/Raytracer.dir/src/main.c.obj: \
  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glfw/include/GLFW/glfw3.h \
  C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\shader.h \
  C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\sphere.h \
+ C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\material.h \
+ C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\stb_image_write.h \
  C:/msys64/ucrt64/include/time.h C:/msys64/ucrt64/include/sys/timeb.h \
  C:/msys64/ucrt64/include/sec_api/sys/timeb_s.h \
  C:/msys64/ucrt64/include/_timeval.h \

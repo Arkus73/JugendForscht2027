@@ -1,1 +1,1 @@
-CMakeFiles/Raytracer.dir/src/main.c.obj CMakeFiles/Raytracer.dir/src/utils.c.obj CMakeFiles/Raytracer.dir/src/shader.c.obj CMakeFiles/Raytracer.dir/src/stb_image.c.obj CMakeFiles/Raytracer.dir/src/camera.c.obj
+CMakeFiles/Raytracer.dir/src/main.c.obj CMakeFiles/Raytracer.dir/src/utils.c.obj CMakeFiles/Raytracer.dir/src/shader.c.obj CMakeFiles/Raytracer.dir/src/stb_image.c.obj CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj CMakeFiles/Raytracer.dir/src/camera.c.obj CMakeFiles/Raytracer.dir/src/sphere.c.obj CMakeFiles/Raytracer.dir/src/material.c.obj

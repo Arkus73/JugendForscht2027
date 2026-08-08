@@ -25,7 +25,10 @@ add_executable(Raytracer
     src/utils.c
     src/shader.c
     src/stb_image.c
+    src/stb_image_write.c
     src/camera.c
+    src/sphere.c
+    src/material.c
 )
 
 # Includes

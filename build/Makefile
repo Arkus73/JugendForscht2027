@@ -306,6 +306,30 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/material.obj: src/material.c.obj
+.PHONY : src/material.obj
+
+# target to build an object file
+src/material.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.obj
+.PHONY : src/material.c.obj
+
+src/material.i: src/material.c.i
+.PHONY : src/material.i
+
+# target to preprocess a source file
+src/material.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.i
+.PHONY : src/material.c.i
+
+src/material.s: src/material.c.s
+.PHONY : src/material.s
+
+# target to generate assembly for a file
+src/material.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.s
+.PHONY : src/material.c.s
+
 src/shader.obj: src/shader.c.obj
 .PHONY : src/shader.obj
 
@@ -330,6 +354,30 @@ src/shader.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/shader.c.s
 .PHONY : src/shader.c.s
 
+src/sphere.obj: src/sphere.c.obj
+.PHONY : src/sphere.obj
+
+# target to build an object file
+src/sphere.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/sphere.c.obj
+.PHONY : src/sphere.c.obj
+
+src/sphere.i: src/sphere.c.i
+.PHONY : src/sphere.i
+
+# target to preprocess a source file
+src/sphere.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/sphere.c.i
+.PHONY : src/sphere.c.i
+
+src/sphere.s: src/sphere.c.s
+.PHONY : src/sphere.s
+
+# target to generate assembly for a file
+src/sphere.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/sphere.c.s
+.PHONY : src/sphere.c.s
+
 src/stb_image.obj: src/stb_image.c.obj
 .PHONY : src/stb_image.obj
 
@@ -353,6 +401,30 @@ src/stb_image.s: src/stb_image.c.s
 src/stb_image.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image.c.s
 .PHONY : src/stb_image.c.s
+
+src/stb_image_write.obj: src/stb_image_write.c.obj
+.PHONY : src/stb_image_write.obj
+
+# target to build an object file
+src/stb_image_write.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj
+.PHONY : src/stb_image_write.c.obj
+
+src/stb_image_write.i: src/stb_image_write.c.i
+.PHONY : src/stb_image_write.i
+
+# target to preprocess a source file
+src/stb_image_write.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image_write.c.i
+.PHONY : src/stb_image_write.c.i
+
+src/stb_image_write.s: src/stb_image_write.c.s
+.PHONY : src/stb_image_write.s
+
+# target to generate assembly for a file
+src/stb_image_write.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image_write.c.s
+.PHONY : src/stb_image_write.c.s
 
 src/utils.obj: src/utils.c.obj
 .PHONY : src/utils.obj
@@ -404,12 +476,21 @@ help:
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
+	@echo ... src/material.obj
+	@echo ... src/material.i
+	@echo ... src/material.s
 	@echo ... src/shader.obj
 	@echo ... src/shader.i
 	@echo ... src/shader.s
+	@echo ... src/sphere.obj
+	@echo ... src/sphere.i
+	@echo ... src/sphere.s
 	@echo ... src/stb_image.obj
 	@echo ... src/stb_image.i
 	@echo ... src/stb_image.s
+	@echo ... src/stb_image_write.obj
+	@echo ... src/stb_image_write.i
+	@echo ... src/stb_image_write.s
 	@echo ... src/utils.obj
 	@echo ... src/utils.i
 	@echo ... src/utils.s
