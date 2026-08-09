@@ -7,9 +7,10 @@ typedef struct {
     vec3 colour;
     vec3 emissionColour;
     float emissionStrength;
+    float smoothness;
 } Material;
 
-Material* createMaterial(vec3 colour, vec3 emissionColour, float emissionStrength);
+Material* createMaterial(vec3 colour, vec3 emissionColour, float emissionStrength, float smoothness);
 void destroyMaterial(Material* this);
 
 #endif
