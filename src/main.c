@@ -1,7 +1,8 @@
 #include <cglm/cglm.h>
+#include "dynamicArray.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#include "model.h"
 #include "shader.h"
 #include "sphere.h"
 #include "stb_image_write.h"
@@ -10,7 +11,7 @@
 #include <time.h>
 #include "utils.h"
 
-#define WINDOW_HEIGHT 1000
+#define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH (WINDOW_HEIGHT * ASPECT_RATIO)
 
 void render(Shader raytracer, unsigned int texture, int avgrRange, bool progressively);
@@ -55,35 +56,99 @@ int main(int argc, char** argv) {
     Shader raytracer = createComputeShader("..\\src\\shaders\\raytracer.glsl");
     useShader(raytracer);
 
-    // Camera wird gesetzt
-    setFloat(raytracer, "cam.FOV", glm_rad(45));
-    setFloat(raytracer, "cam.focalLength", 1.0f);
-    setFloat(raytracer, "cam.aspectRatio", ASPECT_RATIO);
+    // Viewplane-Werte werden aus Kamerawerten berechnet und an den Compute Shader gesendet
+    float FOV = glm_rad(45.0f);
+    // Abstand der Bildebene vom "Auge"
+    float focalLength = 1.0f;
 
-    vec3 camCenter = {-10.0f, 15.0f, 20.0f};
+    float planeHeight = 2 * focalLength * tan(FOV * 0.5f);
+    float planeWidth = planeHeight * ASPECT_RATIO;
+    vec3 topLeftCorner = {-planeWidth / 2.0f, planeHeight / 2.0f, -focalLength};
+    float deltaV = -planeHeight / WINDOW_HEIGHT;
+    float deltaU = planeWidth / WINDOW_WIDTH;
+
+    setVec3(raytracer, "viewplane.topLeftCorner", topLeftCorner);
+    setFloat(raytracer, "viewplane.deltaU", deltaU);
+    setFloat(raytracer, "viewplane.deltaV", deltaV);
+
+    // Nötige Kameradaten werden an den Shader geschickt
+    vec3 camCenter = {3.0f, 5.0f, 10.0f};
     setVec3(raytracer, "cam.center", camCenter);
     mat4 camTransform;
     glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
     glm_mat4_inv(camTransform, camTransform);
     setMatrix(raytracer, "cam.transform", camTransform);
 
-    // Sphären und damit das Aussehen der Welt werden definiert
-    Sphere* ground = createSphere(0, (vec3) {0.0f, -200.0f, 0.0f}, 200.0f, (vec3) {0.0f, 0.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f);
-    uploadSphere(ground, raytracer);
-
-    Sphere* sun = createSphere(1, (vec3) {10.0f, 10.0f, 0.0f}, 3.5f, (vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 30.0f, 0.0f);
+    // Objekte werden definiert
+    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 4.0f, 0.0f, NULL);
+    Sphere* sun = createSphere((vec3) {9.0f, 3.0f, 0.0f}, 4.0f, lightMaterial);
     uploadSphere(sun, raytracer);
+    destroyMaterial(lightMaterial);
 
-    Sphere* redBall = createSphere(2, (vec3) {0.0f, 2.0f, 0.0f}, 2.0f, (vec3) {1.0f, 0.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.6f);
-    uploadSphere(redBall, raytracer);
+    ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
-    Sphere* whiteBall = createSphere(3, (vec3) {0.0f, 1.0f, 5.0f}, 2.0f, (vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.6f);
-    uploadSphere(whiteBall, raytracer);
+    vec4 vertices[] = {
+        // Koordinaten (X, Y, Z)          // Dummy/Padding (W)
+
+        // Rückseite (Z = -0.5) - Blick von außen (Richtung +Z)
+        -0.5f, -0.5f, -0.5f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f,
+
+        // Vorderseite (Z = 0.5) - Blick von außen (Richtung -Z)
+        -0.5f, -0.5f,  0.5f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f,
+
+        // Linke Seite (X = -0.5) - Blick von außen (Richtung +X)
+        -0.5f,  0.5f,  0.5f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,
+
+        // Rechte Seite (X = 0.5) - Blick von außen (Richtung -X)
+        0.5f,  0.5f,  0.5f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f,
+
+        // Unterseite (Y = -0.5) - Blick von außen (Richtung +Y)
+        -0.5f, -0.5f, -0.5f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f,
+
+        // Oberseite (Y = 0.5) - Blick von außen (Richtung -Y)
+        -0.5f,  0.5f, -0.5f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f
+    };
+    Material* material = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL);
+    Model* cube = createModel(modelInstanceTracker, vertices, 36, material, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {1.0f, 1.0f, 1.0f});
+    destroyMaterial(material);
+
+    unsigned int modelSSBO = prepareSSBO(modelInstanceTracker);
+
+    uploadModel(cube, modelInstanceTracker, modelSSBO);
 
     // Sonstige Uniforms werden festgelegt
-    setVec2(raytracer, "imageSize", (vec2) {WINDOW_WIDTH, WINDOW_HEIGHT});
     setInt(raytracer, "maxBounceCount", 3);
-    setInt(raytracer, "samplesPerPixel", 64);
+    setInt(raytracer, "samplesPerPixel", 16);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -98,7 +163,7 @@ int main(int argc, char** argv) {
 
     float lastFrame = glfwGetTime();
     int frameCount = 0;
-    int videoFrameCount = 0;
+    int videoFrameCount = 2;
     
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -108,9 +173,11 @@ int main(int argc, char** argv) {
         float delta = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        useShader(raytracer);
         render(raytracer, texture, frameCount, true);
         frameCount++;
-        renderVideo(raytracer, texture, &frameCount, 1024, &videoFrameCount, 1, 1.0f, window);
+        printf("%d\n", frameCount);
+        renderVideo(raytracer, texture, &frameCount, 512, &videoFrameCount, 1, 3.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);
@@ -122,14 +189,16 @@ int main(int argc, char** argv) {
         glfwSwapBuffers(window);
     }
 
-    glfwTerminate();
-    glfwDestroyWindow(window);
-
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO);
     glDeleteTextures(1, &texture);
     glDeleteProgram(quadShader.ID);
     glDeleteProgram(raytracer.ID);
+
+    deinitModelInstanceTracker(modelInstanceTracker);
+
+    glfwTerminate();
+    glfwDestroyWindow(window);
 
     return EXIT_SUCCESS;
 }
@@ -143,7 +212,6 @@ void render(Shader raytracer, unsigned int texture, int avgrRange, bool progress
     }
     struct timespec ts;
     timespec_get(&ts, TIME_UTC);
-    useShader(raytracer);
     if(progressively) {
         setInt(raytracer, "frameSeed", (int) ts.tv_nsec);
     } else {
@@ -183,6 +251,7 @@ void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int fr
         // Wurde das letzte Bild gerendert, wird das Programm geschlossen
         if(*videoFrameCount >= (int) (videoLength * FPS)) {
             glfwSetWindowShouldClose(window, true);
+            printf("Rendering time: %.2f", glfwGetTime());
         }
     }
 }

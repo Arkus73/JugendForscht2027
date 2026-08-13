@@ -21,7 +21,9 @@ add_subdirectory(external/cglm)
 
 # Executable
 add_executable(Raytracer
+    src/dynamicArray.c
     src/main.c
+    src/model.c
     src/utils.c
     src/shader.c
     src/stb_image.c

@@ -8,18 +8,21 @@
 #define NUM_ATTRIBS 6
 char attribSuffixes[NUM_ATTRIBS][50] = {"center", "radius", "material.colour", "material.emissionColour", "material.emissionStrength", "material.smoothness"};
 
-Sphere* createSphere(int index, vec3 center, float radius, vec3 colour, vec3 emissionColour, float emissionStrength, float smoothness) {
+Sphere* createSphere(vec3 center, float radius, Material* material) {
 
     Sphere* this = malloc(sizeof(Sphere));
     if(this == NULL) {
         throwException("Couldn't allocate memory for sphere");
     }
 
+    static int index = 0;
     this->index = index;
     glm_vec3_copy(center, this->center);
     this->radius = radius;
-    this->material = createMaterial(colour, emissionColour, emissionStrength, smoothness);
+    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC3_ZERO, 0.0f, 0.0f, material);
     snprintf(this->attribPrefix, 20, "spheres[%d].", this->index);
+
+    index++;
 
     return this;
 }

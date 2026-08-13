@@ -1,0 +1,13 @@
+void scene1(Shader raytracer) {
+    Sphere* ground = createSphere(0, (vec3) {0.0f, -200.0f, 0.0f}, 200.0f, (vec3) {0.0f, 0.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f);
+    uploadSphere(ground, raytracer);
+
+    Sphere* sun = createSphere(1, (vec3) {10.0f, 10.0f, 0.0f}, 3.5f, (vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 30.0f, 0.0f);
+    uploadSphere(sun, raytracer);
+
+    Sphere* redBall = createSphere(2, (vec3) {0.0f, 2.0f, 0.0f}, 2.0f, (vec3) {1.0f, 0.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.7f);
+    uploadSphere(redBall, raytracer);
+
+    Sphere* whiteBall = createSphere(3, (vec3) {0.0f, 1.0f, 5.0f}, 2.0f, (vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.7f);
+    uploadSphere(whiteBall, raytracer);
+}

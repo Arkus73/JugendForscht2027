@@ -4,26 +4,32 @@ layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (rgba32f, binding = 0) uniform image2D imgOutput;
 
 struct Camera {
-    float FOV;
-    // Abstand der Bildebene vom "Auge"
-    float focalLength;
-    float aspectRatio;
     // globale Position der Kamera
     vec3 center;
     // Transformiert von Kamera-lokalen zu Weltkoordinaten
     mat4 transform;
 };
 
+struct ViewPlane {
+    vec3 topLeftCorner;
+    float deltaU, deltaV;
+};
+
 struct Material {
     vec3 colour;
+    float smoothness;
     vec3 emissionColour;
     float emissionStrength;
-    float smoothness;
 };
 
 struct Sphere {
     vec3 center;
     float radius;
+    Material material;
+};
+
+struct Triangle {
+    vec3 A, B, C;
     Material material;
 };
 
@@ -41,9 +47,23 @@ struct HitInfo {
 };
 
 uniform Camera cam;
-#define sphereCount 4
-uniform Sphere spheres[sphereCount];
-uniform vec2 imageSize;
+uniform ViewPlane viewplane;
+
+#define SPHERE_COUNT 1
+uniform Sphere spheres[SPHERE_COUNT];
+
+#define CW_BACKFACE_CULLING
+//#define CCW_BACKFACE_CULLING
+//#define NO_CULLING
+#define EPSILON 0.00001
+#define MODEL_COUNT 1
+layout (std430, binding = 1) readonly buffer Models {
+    ivec4 offsetsAndVertexCounts[MODEL_COUNT];
+    mat4 modelMatrices[MODEL_COUNT];
+    Material modelMaterials[MODEL_COUNT];
+    vec4 vertices[];
+};
+
 // Wird beim progressiven Rendering jeden Frame gewechselt, sodass die Zufallszahlen sich jeden Frame verändern
 uniform int frameSeed;
 uniform int maxBounceCount;
@@ -60,24 +80,18 @@ void main() {
     ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
     // Ein pixel-spezifischer Seed wird aus dem gehashten Texel-Koordinaten mit dem Frame-Spezifischen Seed gemischt
     uint pixelSeed  = (texelCoord.x * 73856093) ^ (texelCoord.y * 19349663) ^ (frameSeed * 83492791);
-    // Globale Pixel-Koordinate wird aus den Kameradaten berechnet
-    float planeHeight = 2 * cam.focalLength * tan(cam.FOV * 0.5);
-    float planeWidth = planeHeight * cam.aspectRatio;
-    vec3 topLeftCorner = vec3(-planeWidth / 2.0, planeHeight / 2.0, -cam.focalLength);
-    float deltaV = -planeHeight / imageSize.y;
-    float deltaU = planeWidth / imageSize.x;
     
     Ray ray;
     ray.origin = cam.center;
     
     // Licht von samplesPerPixel Strahlen wird akkumuliert. Der Mittelwert davon ist dann die Pixelfarbe.
-    vec3 totalLight;
+    vec3 totalLight = vec3(0.0);
     for(int i = 0; i < samplesPerPixel; i++) {
 
-        // ray.dir wird jeden Sample etwas für Anti-Aliasing gejittert
+        // Die globale Pixelkoordinate und somit auch ray.dir werden jeden Sample etwas für Anti-Aliasing gejittert
         float jitterX = randf(pixelSeed) - 0.5;
         float jitterY = randf(pixelSeed) - 0.5;
-        vec3 localPixelCoord = vec3(topLeftCorner.x + deltaU * (texelCoord.x + 0.5 + jitterX), topLeftCorner.y + deltaV * (texelCoord.y + 0.5 + jitterY), topLeftCorner.z);
+        vec3 localPixelCoord = vec3(viewplane.topLeftCorner.x + viewplane.deltaU * (texelCoord.x + 0.5 + jitterX), viewplane.topLeftCorner.y + viewplane.deltaV * (texelCoord.y + 0.5 + jitterY), viewplane.topLeftCorner.z);
         vec3 globalPixelCoord = vec3((cam.transform * vec4(localPixelCoord, 1.0)).xyz);
         ray.dir = normalize(globalPixelCoord - cam.center);
 
@@ -120,18 +134,101 @@ HitInfo intersectionSphere(Ray ray, Sphere sphere) {
     return hitInfo;
 }
 
+// Möller-Trumbore-Algorithmus: https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle//moller-trumbore-ray-triangle-intersection.html
+HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
+
+    vec3 oa = ray.origin - triangle.A;
+    // Zwei Seiten des Dreieck (Schenkel des Winkels bei A)
+    vec3 E1 = triangle.B - triangle.A;
+    vec3 E2 = triangle.C - triangle.A;
+    
+    HitInfo hitInfo;
+    hitInfo.didHit = false;
+
+    // Wichtig: Um den folgenden Code zu verstehen, muss klar gestellt werden, dass dot(A, cross(B, C)) = dot(C, cross(A, B)) = dot(B, cross(C, A)) = determinant(mat3(A, B, C))
+    vec3 pvec =  cross(ray.dir, E2);
+    float basicDet = dot(E1, pvec);
+    //                  ^ determinant(mat3(-ray.dir, E1, E2))
+    
+    #ifdef CW_BACKFACE_CULLING
+    // Ist die Determinante kleiner/größer als 0, ist das Dreieck ein Backface. Ist sie nahe an 0, steht ray.dir parallel zum Dreieck (da basicDet auch = -dot(ray.dir, cross(E1, E2)) und cross(E1, E2) = normal) und es wird discarded
+    if(basicDet < EPSILON) {
+        return hitInfo;
+    }
+    #endif
+    #ifdef CCW_BACKFACE_CULLING
+    if(basicDet > EPSILON) {
+        return hitInfo;
+    }
+    #endif
+    #ifdef NO_CULLING
+    if(abs(basicDet) < EPSILON) {
+        return hitInfo;
+    }
+    #endif
+
+    // Nutzung der Cramerschen Regel, um die Schnittgleichung basicMatrix * (t, u, v) = oa zu lösen (t ist der Skalar des Strahls; u, v die Baryzentrischen Koordinaten des Dreiecks)
+    float u = dot(oa, pvec) / basicDet;
+    //           ^ determinant(mat3(-ray.dir, oa, E2))
+    if(u < 0.0 || u > 1.0) {
+        return hitInfo;
+    }
+
+    vec3 qvec = cross(oa, E1);
+    float v = dot(ray.dir, qvec) / basicDet;
+    //           ^ determinant(mat3(-ray.dir, E1, oa))
+    if(v < 0.0 || v > 1.0 || (u + v) > 1.0) {
+        return hitInfo;
+    }
+
+    // Weisen die baryzentrischen Koordinaten auf einen Schnitt hin, werden die HitInfo-Daten berechnet
+    float t = dot(E2, qvec) / basicDet;
+    //          ^ determinant(mat3(oa, E1, E2))
+    // Dreiecke, die hinter dem Strahl liegen, werden discarded
+    if(t < 0.0) {
+        return hitInfo;
+    }
+
+    hitInfo.didHit = true;
+    hitInfo.dist = t;
+    hitInfo.hitPoint = ray.origin + ray.dir * t;
+    hitInfo.material = triangle.material;
+    hitInfo.normal = normalize(cross(E1, E2));
+
+    #ifdef NO_CULLING
+    // Für Backfaces wird die Normale zum Strahl gedreht, damit Shading ordentlich klappt
+    if(basicDet < 0.0) {
+        hitInfo.normal *= -1.0;
+    }
+    #endif
+
+    return hitInfo;
+}
+
 HitInfo calculateClosestHit(Ray ray) {
 
     HitInfo closestHit;
     closestHit.dist = 100000.0;
     closestHit.material.colour = vec3(0.0, 0.0, 0.0);
 
-    for(int i = 0; i < sphereCount; i++) {
+    for(int i = 0; i < SPHERE_COUNT; i++) {
         HitInfo hitInfo = intersectionSphere(ray, spheres[i]);
         if(hitInfo.didHit && hitInfo.dist < closestHit.dist) {
             closestHit = hitInfo;
         }
     }
+    for(int i = 0 ; i < MODEL_COUNT; i++) {
+        Material material = modelMaterials[i];
+        mat4 modelMatrix = modelMatrices[i];
+        for(int j = offsetsAndVertexCounts[i].x; j < offsetsAndVertexCounts[i].x + offsetsAndVertexCounts[i].y; j += 3) {
+            Triangle triangle = {vec3(modelMatrix * vertices[j]), vec3(modelMatrix * vertices[j + 1]), vec3(modelMatrix * vertices[j + 2]), material};
+            HitInfo hitInfo = intersectionTriangle(ray, triangle);
+            if(hitInfo.didHit && hitInfo.dist < closestHit.dist) {
+                closestHit = hitInfo;
+            }
+        }
+    }
+
     return closestHit;
 }
 
@@ -178,16 +275,12 @@ vec3 traceRay(Ray ray, inout uint pixelSeed) {
                 newDir = hitInfo.normal;
             }
 
-            // Zeigt die neue Richtung ins Innere der Sphäre, wird sie umgekehrt
+            // Zeigt die neue Richtung ins Innere des Primitivs, wird sie umgekehrt
             if(dot(newDir, hitInfo.normal) < 0.0) {
                 newDir *= -1;
             }
 
             Material material = hitInfo.material;
-            if(i == 1) {
-                //return material.colour;
-            }
-
             if (randf(pixelSeed) <= material.smoothness) {
                 ray.dir = reflect(ray.dir, hitInfo.normal);
             } else {

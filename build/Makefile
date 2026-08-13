@@ -282,6 +282,30 @@ src/camera.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/camera.c.s
 .PHONY : src/camera.c.s
 
+src/dynamicArray.obj: src/dynamicArray.c.obj
+.PHONY : src/dynamicArray.obj
+
+# target to build an object file
+src/dynamicArray.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj
+.PHONY : src/dynamicArray.c.obj
+
+src/dynamicArray.i: src/dynamicArray.c.i
+.PHONY : src/dynamicArray.i
+
+# target to preprocess a source file
+src/dynamicArray.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/dynamicArray.c.i
+.PHONY : src/dynamicArray.c.i
+
+src/dynamicArray.s: src/dynamicArray.c.s
+.PHONY : src/dynamicArray.s
+
+# target to generate assembly for a file
+src/dynamicArray.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/dynamicArray.c.s
+.PHONY : src/dynamicArray.c.s
+
 src/main.obj: src/main.c.obj
 .PHONY : src/main.obj
 
@@ -329,6 +353,30 @@ src/material.s: src/material.c.s
 src/material.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.s
 .PHONY : src/material.c.s
+
+src/model.obj: src/model.c.obj
+.PHONY : src/model.obj
+
+# target to build an object file
+src/model.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.obj
+.PHONY : src/model.c.obj
+
+src/model.i: src/model.c.i
+.PHONY : src/model.i
+
+# target to preprocess a source file
+src/model.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.i
+.PHONY : src/model.c.i
+
+src/model.s: src/model.c.s
+.PHONY : src/model.s
+
+# target to generate assembly for a file
+src/model.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.s
+.PHONY : src/model.c.s
 
 src/shader.obj: src/shader.c.obj
 .PHONY : src/shader.obj
@@ -473,12 +521,18 @@ help:
 	@echo ... src/camera.obj
 	@echo ... src/camera.i
 	@echo ... src/camera.s
+	@echo ... src/dynamicArray.obj
+	@echo ... src/dynamicArray.i
+	@echo ... src/dynamicArray.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
 	@echo ... src/material.obj
 	@echo ... src/material.i
 	@echo ... src/material.s
+	@echo ... src/model.obj
+	@echo ... src/model.i
+	@echo ... src/model.s
 	@echo ... src/shader.obj
 	@echo ... src/shader.i
 	@echo ... src/shader.s

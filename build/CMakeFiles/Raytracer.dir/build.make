@@ -71,11 +71,26 @@ include CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/codegen:
 .PHONY : CMakeFiles/Raytracer.dir/codegen
 
+CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj: CMakeFiles/Raytracer.dir/flags.make
+CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
+CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/dynamicArray.c
+CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj -MF CMakeFiles\Raytracer.dir\src\dynamicArray.c.obj.d -o CMakeFiles\Raytracer.dir\src\dynamicArray.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\dynamicArray.c
+
+CMakeFiles/Raytracer.dir/src/dynamicArray.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Raytracer.dir/src/dynamicArray.c.i"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\dynamicArray.c > CMakeFiles\Raytracer.dir\src\dynamicArray.c.i
+
+CMakeFiles/Raytracer.dir/src/dynamicArray.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Raytracer.dir/src/dynamicArray.c.s"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\dynamicArray.c -o CMakeFiles\Raytracer.dir\src\dynamicArray.c.s
+
 CMakeFiles/Raytracer.dir/src/main.c.obj: CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/src/main.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/main.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/main.c
 CMakeFiles/Raytracer.dir/src/main.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Raytracer.dir/src/main.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Raytracer.dir/src/main.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/main.c.obj -MF CMakeFiles\Raytracer.dir\src\main.c.obj.d -o CMakeFiles\Raytracer.dir\src\main.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\main.c
 
 CMakeFiles/Raytracer.dir/src/main.c.i: cmake_force
@@ -86,11 +101,26 @@ CMakeFiles/Raytracer.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Raytracer.dir/src/main.c.s"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\main.c -o CMakeFiles\Raytracer.dir\src\main.c.s
 
+CMakeFiles/Raytracer.dir/src/model.c.obj: CMakeFiles/Raytracer.dir/flags.make
+CMakeFiles/Raytracer.dir/src/model.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
+CMakeFiles/Raytracer.dir/src/model.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/model.c
+CMakeFiles/Raytracer.dir/src/model.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Raytracer.dir/src/model.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/model.c.obj -MF CMakeFiles\Raytracer.dir\src\model.c.obj.d -o CMakeFiles\Raytracer.dir\src\model.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\model.c
+
+CMakeFiles/Raytracer.dir/src/model.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Raytracer.dir/src/model.c.i"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\model.c > CMakeFiles\Raytracer.dir\src\model.c.i
+
+CMakeFiles/Raytracer.dir/src/model.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Raytracer.dir/src/model.c.s"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\model.c -o CMakeFiles\Raytracer.dir\src\model.c.s
+
 CMakeFiles/Raytracer.dir/src/utils.c.obj: CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/src/utils.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/utils.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.c
 CMakeFiles/Raytracer.dir/src/utils.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Raytracer.dir/src/utils.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/Raytracer.dir/src/utils.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/utils.c.obj -MF CMakeFiles\Raytracer.dir\src\utils.c.obj.d -o CMakeFiles\Raytracer.dir\src\utils.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\utils.c
 
 CMakeFiles/Raytracer.dir/src/utils.c.i: cmake_force
@@ -105,7 +135,7 @@ CMakeFiles/Raytracer.dir/src/shader.c.obj: CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/src/shader.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/shader.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.c
 CMakeFiles/Raytracer.dir/src/shader.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Raytracer.dir/src/shader.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/Raytracer.dir/src/shader.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/shader.c.obj -MF CMakeFiles\Raytracer.dir\src\shader.c.obj.d -o CMakeFiles\Raytracer.dir\src\shader.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\shader.c
 
 CMakeFiles/Raytracer.dir/src/shader.c.i: cmake_force
@@ -120,7 +150,7 @@ CMakeFiles/Raytracer.dir/src/stb_image.c.obj: CMakeFiles/Raytracer.dir/flags.mak
 CMakeFiles/Raytracer.dir/src/stb_image.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/stb_image.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/stb_image.c
 CMakeFiles/Raytracer.dir/src/stb_image.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/Raytracer.dir/src/stb_image.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/Raytracer.dir/src/stb_image.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/stb_image.c.obj -MF CMakeFiles\Raytracer.dir\src\stb_image.c.obj.d -o CMakeFiles\Raytracer.dir\src\stb_image.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\stb_image.c
 
 CMakeFiles/Raytracer.dir/src/stb_image.c.i: cmake_force
@@ -135,7 +165,7 @@ CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj: CMakeFiles/Raytracer.dir/fla
 CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/stb_image_write.c
 CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj -MF CMakeFiles\Raytracer.dir\src\stb_image_write.c.obj.d -o CMakeFiles\Raytracer.dir\src\stb_image_write.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\stb_image_write.c
 
 CMakeFiles/Raytracer.dir/src/stb_image_write.c.i: cmake_force
@@ -150,7 +180,7 @@ CMakeFiles/Raytracer.dir/src/camera.c.obj: CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/src/camera.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/camera.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.c
 CMakeFiles/Raytracer.dir/src/camera.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/Raytracer.dir/src/camera.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/Raytracer.dir/src/camera.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/camera.c.obj -MF CMakeFiles\Raytracer.dir\src\camera.c.obj.d -o CMakeFiles\Raytracer.dir\src\camera.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\camera.c
 
 CMakeFiles/Raytracer.dir/src/camera.c.i: cmake_force
@@ -165,7 +195,7 @@ CMakeFiles/Raytracer.dir/src/sphere.c.obj: CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/src/sphere.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/sphere.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/sphere.c
 CMakeFiles/Raytracer.dir/src/sphere.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/Raytracer.dir/src/sphere.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/Raytracer.dir/src/sphere.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/sphere.c.obj -MF CMakeFiles\Raytracer.dir\src\sphere.c.obj.d -o CMakeFiles\Raytracer.dir\src\sphere.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\sphere.c
 
 CMakeFiles/Raytracer.dir/src/sphere.c.i: cmake_force
@@ -180,7 +210,7 @@ CMakeFiles/Raytracer.dir/src/material.c.obj: CMakeFiles/Raytracer.dir/flags.make
 CMakeFiles/Raytracer.dir/src/material.c.obj: CMakeFiles/Raytracer.dir/includes_C.rsp
 CMakeFiles/Raytracer.dir/src/material.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/material.c
 CMakeFiles/Raytracer.dir/src/material.c.obj: CMakeFiles/Raytracer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/Raytracer.dir/src/material.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/Raytracer.dir/src/material.c.obj"
 	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Raytracer.dir/src/material.c.obj -MF CMakeFiles\Raytracer.dir\src\material.c.obj.d -o CMakeFiles\Raytracer.dir\src\material.c.obj -c C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\material.c
 
 CMakeFiles/Raytracer.dir/src/material.c.i: cmake_force
@@ -193,7 +223,9 @@ CMakeFiles/Raytracer.dir/src/material.c.s: cmake_force
 
 # Object files for target Raytracer
 Raytracer_OBJECTS = \
+"CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj" \
 "CMakeFiles/Raytracer.dir/src/main.c.obj" \
+"CMakeFiles/Raytracer.dir/src/model.c.obj" \
 "CMakeFiles/Raytracer.dir/src/utils.c.obj" \
 "CMakeFiles/Raytracer.dir/src/shader.c.obj" \
 "CMakeFiles/Raytracer.dir/src/stb_image.c.obj" \
@@ -205,7 +237,9 @@ Raytracer_OBJECTS = \
 # External object files for target Raytracer
 Raytracer_EXTERNAL_OBJECTS =
 
+Raytracer.exe: CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj
 Raytracer.exe: CMakeFiles/Raytracer.dir/src/main.c.obj
+Raytracer.exe: CMakeFiles/Raytracer.dir/src/model.c.obj
 Raytracer.exe: CMakeFiles/Raytracer.dir/src/utils.c.obj
 Raytracer.exe: CMakeFiles/Raytracer.dir/src/shader.c.obj
 Raytracer.exe: CMakeFiles/Raytracer.dir/src/stb_image.c.obj
@@ -220,7 +254,7 @@ Raytracer.exe: external/cglm/libcglm.dll.a
 Raytracer.exe: CMakeFiles/Raytracer.dir/linkLibs.rsp
 Raytracer.exe: CMakeFiles/Raytracer.dir/objects1.rsp
 Raytracer.exe: CMakeFiles/Raytracer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable Raytracer.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C executable Raytracer.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\Raytracer.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
