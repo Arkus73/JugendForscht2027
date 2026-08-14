@@ -33,6 +33,10 @@ struct Triangle {
     Material material;
 };
 
+struct AABB {
+    vec4 min, max;
+};
+
 struct Ray {
     vec3 origin;
     vec3 dir;
@@ -56,10 +60,12 @@ uniform Sphere spheres[SPHERE_COUNT];
 //#define CCW_BACKFACE_CULLING
 //#define NO_CULLING
 #define EPSILON 0.00001
-#define MODEL_COUNT 1
+#define MODEL_COUNT 7
 layout (std430, binding = 1) readonly buffer Models {
-    ivec4 offsetsAndVertexCounts[MODEL_COUNT];
+    ivec4 meshOffsetsAndVertexCounts[MODEL_COUNT];
     mat4 modelMatrices[MODEL_COUNT];
+    mat4 invModelMatrices[MODEL_COUNT];
+    AABB modelAABBs[MODEL_COUNT];
     Material modelMaterials[MODEL_COUNT];
     vec4 vertices[];
 };
@@ -149,6 +155,7 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     vec3 pvec =  cross(ray.dir, E2);
     float basicDet = dot(E1, pvec);
     //                  ^ determinant(mat3(-ray.dir, E1, E2))
+    float invBasicDet = 1.0 / basicDet;
     
     #ifdef CW_BACKFACE_CULLING
     // Ist die Determinante kleiner/größer als 0, ist das Dreieck ein Backface. Ist sie nahe an 0, steht ray.dir parallel zum Dreieck (da basicDet auch = -dot(ray.dir, cross(E1, E2)) und cross(E1, E2) = normal) und es wird discarded
@@ -168,21 +175,21 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     #endif
 
     // Nutzung der Cramerschen Regel, um die Schnittgleichung basicMatrix * (t, u, v) = oa zu lösen (t ist der Skalar des Strahls; u, v die Baryzentrischen Koordinaten des Dreiecks)
-    float u = dot(oa, pvec) / basicDet;
+    float u = dot(oa, pvec) * invBasicDet;
     //           ^ determinant(mat3(-ray.dir, oa, E2))
     if(u < 0.0 || u > 1.0) {
         return hitInfo;
     }
 
     vec3 qvec = cross(oa, E1);
-    float v = dot(ray.dir, qvec) / basicDet;
+    float v = dot(ray.dir, qvec) * invBasicDet;
     //           ^ determinant(mat3(-ray.dir, E1, oa))
     if(v < 0.0 || v > 1.0 || (u + v) > 1.0) {
         return hitInfo;
     }
 
     // Weisen die baryzentrischen Koordinaten auf einen Schnitt hin, werden die HitInfo-Daten berechnet
-    float t = dot(E2, qvec) / basicDet;
+    float t = dot(E2, qvec) * invBasicDet;
     //          ^ determinant(mat3(oa, E1, E2))
     // Dreiecke, die hinter dem Strahl liegen, werden discarded
     if(t < 0.0) {
@@ -205,6 +212,19 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     return hitInfo;
 }
 
+bool intersectionAABB(vec3 localRayOrigin, vec3 invLocalRayDir, AABB box) {
+    vec3 t0 = (box.min.xyz - localRayOrigin) * invLocalRayDir;
+    vec3 t1 = (box.max.xyz - localRayOrigin) * invLocalRayDir;
+    
+    vec3 tminv = min(t0, t1);
+    vec3 tmaxv = max(t0, t1);
+    
+    float tMin = max(max(tminv.x, tminv.y), tminv.z);
+    float tMax = min(min(tmaxv.x, tmaxv.y), tmaxv.z);
+    
+    return tMax >= max(0.0, tMin) && tMin <= tMax;
+}
+
 HitInfo calculateClosestHit(Ray ray) {
 
     HitInfo closestHit;
@@ -217,14 +237,39 @@ HitInfo calculateClosestHit(Ray ray) {
             closestHit = hitInfo;
         }
     }
+
     for(int i = 0 ; i < MODEL_COUNT; i++) {
+        // Der Ray wird für die Schnitttests ins lokale Koordinatensystem des Models überführt
+        vec3 localRayDir = (invModelMatrices[i] * vec4(ray.dir, 0.0)).xyz;
+        vec3 localRayOrigin = (invModelMatrices[i] * vec4(ray.origin, 1.0)).xyz;
+        // Wird die AABB des Models nicht geschnitten, wird es übersprungen
+        vec3 localInvRayDir = 1.0 / normalize(localRayDir);
+        if(!intersectionAABB(localRayOrigin, localInvRayDir, modelAABBs[i])) {
+            continue;
+        }
+
         Material material = modelMaterials[i];
         mat4 modelMatrix = modelMatrices[i];
-        for(int j = offsetsAndVertexCounts[i].x; j < offsetsAndVertexCounts[i].x + offsetsAndVertexCounts[i].y; j += 3) {
-            Triangle triangle = {vec3(modelMatrix * vertices[j]), vec3(modelMatrix * vertices[j + 1]), vec3(modelMatrix * vertices[j + 2]), material};
-            HitInfo hitInfo = intersectionTriangle(ray, triangle);
-            if(hitInfo.didHit && hitInfo.dist < closestHit.dist) {
-                closestHit = hitInfo;
+        int meshOffset = meshOffsetsAndVertexCounts[i].x;
+        int meshVertexCount = meshOffsetsAndVertexCounts[i].y;
+
+        // Es wird über die Vertices des Meshes iteriert und je 3 Vertices der Möller-Trumbore-Algorithmus mit dem transformierten, Model-lokalen Ray durchgeführt
+        Ray localRay = {localRayOrigin, localRayDir};
+        mat4 normalMatrix = transpose(invModelMatrices[i]);
+        for(int j = meshOffset; j < meshOffset + meshVertexCount; j += 3) {
+
+            Triangle localTriangle = {vertices[j].xyz, vertices[j + 1].xyz, vertices[j + 2].xyz, material};
+            HitInfo hitInfo = intersectionTriangle(localRay, localTriangle);
+
+            if(hitInfo.didHit) {
+
+                if(hitInfo.dist < closestHit.dist) {
+                    closestHit = hitInfo;
+                    // hitPoint wird in den globalen Raum überführt 
+                    closestHit.hitPoint = ray.origin + hitInfo.dist * ray.dir;
+                    // Normale wird mit der transponierten Inversen der Model-Matrix in den globalen Raum transformiert, damit die Normale trotz nicht-uniformer Skalierung senkrecht auf dem Dreieck steht
+                    closestHit.normal = normalize((normalMatrix * vec4(hitInfo.normal, 0.0)).xyz);
+                }
             }
         }
     }

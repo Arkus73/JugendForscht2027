@@ -11,7 +11,7 @@
 #include <time.h>
 #include "utils.h"
 
-#define WINDOW_HEIGHT 800
+#define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH (WINDOW_HEIGHT * ASPECT_RATIO)
 
 void render(Shader raytracer, unsigned int texture, int avgrRange, bool progressively);
@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     useShader(raytracer);
 
     // Viewplane-Werte werden aus Kamerawerten berechnet und an den Compute Shader gesendet
-    float FOV = glm_rad(45.0f);
+    float FOV = glm_rad(60.0f);
     // Abstand der Bildebene vom "Auge"
     float focalLength = 1.0f;
 
@@ -72,18 +72,31 @@ int main(int argc, char** argv) {
     setFloat(raytracer, "viewplane.deltaV", deltaV);
 
     // Nötige Kameradaten werden an den Shader geschickt
-    vec3 camCenter = {3.0f, 5.0f, 10.0f};
+    vec3 camCenter = {0.0f, 0.0f, 14.0f};
     setVec3(raytracer, "cam.center", camCenter);
     mat4 camTransform;
     glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
     glm_mat4_inv(camTransform, camTransform);
     setMatrix(raytracer, "cam.transform", camTransform);
 
-    // Objekte werden definiert
-    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 4.0f, 0.0f, NULL);
-    Sphere* sun = createSphere((vec3) {9.0f, 3.0f, 0.0f}, 4.0f, lightMaterial);
-    uploadSphere(sun, raytracer);
-    destroyMaterial(lightMaterial);
+
+    // Szene wird definiert
+
+    DynamicArray* materialInstanceTracker = createDynamicArray(sizeof(Material*), 1);
+
+    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, 0.0f, NULL, materialInstanceTracker);
+    Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
+    Material* reflectiveWhiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 1.0f, NULL, materialInstanceTracker);
+    Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
+    Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
+    Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
+
+    DynamicArray* sphereInstanceTracker = createDynamicArray(sizeof(Sphere*), 1);
+
+    Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 2.0f}, 3.0f, reflectiveWhiteMaterial, false, sphereInstanceTracker);
+    
+    uploadAllSpheres(sphereInstanceTracker, raytracer);
+    disposeStaticSpheres(sphereInstanceTracker);
 
     ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
@@ -138,17 +151,28 @@ int main(int argc, char** argv) {
         0.5f,  0.5f, -0.5f, 1.0f,
         -0.5f,  0.5f, -0.5f, 1.0f
     };
-    Material* material = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL);
-    Model* cube = createModel(modelInstanceTracker, vertices, 36, material, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {1.0f, 1.0f, 1.0f});
-    destroyMaterial(material);
+    
+    Model* lightSource = createModel(modelInstanceTracker, vertices, 36, lightMaterial, (vec3) {0.0f, 9.75f, 0.0f}, (vec3) {7.0f, 0.5f, 7.0f}, false);
+
+    Model* backWall = createModel(modelInstanceTracker, vertices, 36, whiteMaterial, (vec3) {0.0f, 0.0f, -15.5f}, (vec3) {20.0f, 20.0f, 1.0f}, false);
+    Model* frontWall = createModel(modelInstanceTracker, vertices, 36, whiteMaterial, (vec3) {0.0f, 0.0f, 15.5f}, (vec3) {20.0f, 20.0f, 1.0f}, false);
+
+    Model* topWall = createModel(modelInstanceTracker, vertices, 36, whiteMaterial, (vec3) {0.0f, 10.5f, 0.0f}, (vec3) {20.0f, 1.0f, 30.0f}, false);
+    Model* bottomWall = createModel(modelInstanceTracker, vertices, 36, greenMaterial, (vec3) {0.0f, -10.5f, 0.0f}, (vec3) {20.0f, 1.0f, 30.0f}, false);
+
+    Model* leftWall = createModel(modelInstanceTracker, vertices, 36, redMaterial, (vec3) {-10.5f, 0.0f, 0.0f}, (vec3) {1.0f, 20.0f, 30.0f}, false);
+    Model* rightWall = createModel(modelInstanceTracker, vertices, 36, blueMaterial, (vec3) {10.5f, 0.0f, 0.0f}, (vec3) {1.0f, 20.0f, 30.0f}, false);
 
     unsigned int modelSSBO = prepareSSBO(modelInstanceTracker);
 
-    uploadModel(cube, modelInstanceTracker, modelSSBO);
+    uploadAllModels(modelInstanceTracker, modelSSBO);
+    disposeStaticModels(modelInstanceTracker);
+
+    disposeMaterialBlueprints(materialInstanceTracker);
 
     // Sonstige Uniforms werden festgelegt
-    setInt(raytracer, "maxBounceCount", 3);
-    setInt(raytracer, "samplesPerPixel", 16);
+    setInt(raytracer, "maxBounceCount", 5);
+    setInt(raytracer, "samplesPerPixel", 8);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -176,8 +200,8 @@ int main(int argc, char** argv) {
         useShader(raytracer);
         render(raytracer, texture, frameCount, true);
         frameCount++;
-        printf("%d\n", frameCount);
-        renderVideo(raytracer, texture, &frameCount, 512, &videoFrameCount, 1, 3.0f, window);
+        //printf("%d\n", frameCount);
+        //renderVideo(raytracer, texture, &frameCount, 512, &videoFrameCount, 1, 3.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);

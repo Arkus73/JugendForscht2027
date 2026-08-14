@@ -258,6 +258,30 @@ cglm/fast:
 	$(MAKE) $(MAKESILENT) -f external\cglm\CMakeFiles\cglm.dir\build.make external/cglm/CMakeFiles/cglm.dir/build
 .PHONY : cglm/fast
 
+src/AABB.obj: src/AABB.c.obj
+.PHONY : src/AABB.obj
+
+# target to build an object file
+src/AABB.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.obj
+.PHONY : src/AABB.c.obj
+
+src/AABB.i: src/AABB.c.i
+.PHONY : src/AABB.i
+
+# target to preprocess a source file
+src/AABB.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.i
+.PHONY : src/AABB.c.i
+
+src/AABB.s: src/AABB.c.s
+.PHONY : src/AABB.s
+
+# target to generate assembly for a file
+src/AABB.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.s
+.PHONY : src/AABB.c.s
+
 src/camera.obj: src/camera.c.obj
 .PHONY : src/camera.obj
 
@@ -518,6 +542,9 @@ help:
 	@echo ... cglm
 	@echo ... glad
 	@echo ... glfw
+	@echo ... src/AABB.obj
+	@echo ... src/AABB.i
+	@echo ... src/AABB.s
 	@echo ... src/camera.obj
 	@echo ... src/camera.i
 	@echo ... src/camera.s

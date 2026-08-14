@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/AABB.c" "CMakeFiles/Raytracer.dir/src/AABB.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/AABB.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.c" "CMakeFiles/Raytracer.dir/src/camera.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/camera.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/dynamicArray.c" "CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj.d"
   "C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/main.c" "CMakeFiles/Raytracer.dir/src/main.c.obj" "gcc" "CMakeFiles/Raytracer.dir/src/main.c.obj.d"

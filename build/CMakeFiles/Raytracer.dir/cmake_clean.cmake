@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Raytracer.dir/src/AABB.c.obj"
+  "CMakeFiles/Raytracer.dir/src/AABB.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/camera.c.obj"
   "CMakeFiles/Raytracer.dir/src/camera.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj"

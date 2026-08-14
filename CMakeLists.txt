@@ -21,6 +21,7 @@ add_subdirectory(external/cglm)
 
 # Executable
 add_executable(Raytracer
+    src/AABB.c
     src/dynamicArray.c
     src/main.c
     src/model.c

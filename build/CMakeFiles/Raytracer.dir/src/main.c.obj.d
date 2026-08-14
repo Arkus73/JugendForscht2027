@@ -105,6 +105,7 @@ CMakeFiles/Raytracer.dir/src/main.c.obj: \
  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/KHR/khrplatform.h \
  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glfw/include/GLFW/glfw3.h \
  C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\model.h \
+ C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\AABB.h \
  C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\material.h \
  C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\shader.h \
  C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\src\sphere.h \
