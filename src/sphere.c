@@ -60,7 +60,7 @@ void disposeStaticSpheres(DynamicArray* sphereInstanceTracker) {
 
 void uploadSphere(Sphere* this, Shader raytracer) {
 
-    char attribs[NUM_ATTRIBS][50] = {"", "", "", "", ""};
+    char attribs[NUM_ATTRIBS][60] = {"", "", "", "", ""};
     for(int i = 0; i < NUM_ATTRIBS; i++) {
         strcat(attribs[i], this->attribPrefix);
         strcat(attribs[i], attribSuffixes[i]);
@@ -82,7 +82,7 @@ void uploadAllSpheres(DynamicArray* sphereInstanceTracker, Shader raytracer) {
 
 void uploadSphereSpatialData(Sphere* this, Shader raytracer) {
 
-    char attribs[2][50] = {"", ""};
+    char attribs[2][60] = {"", ""};
     for(int i = 0; i < 2; i++) {
         strcat(attribs[i], this->attribPrefix);
         strcat(attribs[i], attribSuffixes[i]);
@@ -94,7 +94,7 @@ void uploadSphereSpatialData(Sphere* this, Shader raytracer) {
 
 void uploadSphereMaterialData(Sphere* this, Shader raytracer) {
 
-    char attribs[NUM_ATTRIBS - 2][50] = {"", "", "", ""};
+    char attribs[NUM_ATTRIBS - 2][60] = {"", "", "", ""};
     for(int i = 0; i < NUM_ATTRIBS - 2; i++) {
         strcat(attribs[i], this->attribPrefix);
         strcat(attribs[i], attribSuffixes[i + 2]);

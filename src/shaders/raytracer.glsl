@@ -79,29 +79,47 @@ uniform int frameCount;
 HitInfo intersectionSphere(Ray ray, Sphere sphere);
 HitInfo calculateClosestHit(Ray ray);
 // Generiert eine Zufallszahl ziwschen 0.0f und 1.0f
-float randf(inout uint pixelSeed);
-vec3 traceRay(Ray ray, inout uint pixelSeed);
+float randf(inout uint state);
+vec3 traceRay(Ray ray, inout uint state);
+
+/* Bezug zur Rendergleichung:
+
+Also an sich beschreibt die Rendergleichung erstmal, wie viel Licht von einem Punkt x aus in eine bestimmte Richtung omega emittiert und reflektiert wird. Dieser Wert L(x, omega)
+setzt sich zum einen aus Le(x, omega), der den Wert des in die Richtung omega emittierten Lichts beschreibt, und aus dem Integral über die BRDF, dem einfallenden Licht auf x
+L(x, omega strich) und dem Kosinus des Einfallswinkels zusammen.
+
+Die Lösung der Rendering-Gleichung erfolgt hier im Code numerisch, indem mehrere "Samples" durch traceRay() generiert werden, die L(x, omega) für einen konkreten Pfad mit maximaler Tiefe
+maxBounceCount darstellen. 
+
+In traceRay() wird mithilfe der for-Schleife das Problem der unendlichen Rekursion durch die Tatsache, dass für die Berechnung von L(x, omega) immer auch L(x, omega strich) benötigt wird,
+was wiederum einem weiteren L(y, omega) aus Sicht des nächsten Schnittpunkts entspricht, gelöst. Dieses neue L(y, omega) wird mithilfe eines durch die BRDF randomisierten abgeprallten Strahls
+so lange berechnet, bis eine Lichtquelle getroffen wird und somit Le(x, omega) != 0 an dieser Stelle gilt oder bis maxBounceCount erreicht ist. Auf diesem Weg wird durch die BRDFs der 
+throughput modifiziert, der am Ende mit dem emittierten Licht am Strahlenende multipliziert wird, um den Einfluss der BRDFs aller Schnitte durchzusetzen. Durch das Cosine-
+Weighted Hemisphere Sampling kürzt sich der Cosinusterm aus der Gleichung heraus.
+
+Diese Samples werden schlussendlich aufsummiert und gemittelt um das endgültige L(x, omega) zu erhalten, was als Pixelfarbe ausgegeben wird.
+
+*/
 
 void main() {
     ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
-    // Ein pixel-spezifischer Seed wird aus dem gehashten Texel-Koordinaten mit dem Frame-Spezifischen Seed gemischt
-    uint pixelSeed  = (texelCoord.x * 73856093) ^ (texelCoord.y * 19349663) ^ (frameSeed * 83492791);
+    // Ein pixel- und frameabhängiger Seed wird aus dem gehashten Texel-Koordinaten mit dem Frame-Spezifischen Seed gemischt
+    uint state  = (texelCoord.x * 73856093) ^ (texelCoord.y * 19349663) ^ (frameSeed * 83492791);
     
     Ray ray;
     ray.origin = cam.center;
     
-    // Licht von samplesPerPixel Strahlen wird akkumuliert. Der Mittelwert davon ist dann die Pixelfarbe.
     vec3 totalLight = vec3(0.0);
     for(int i = 0; i < samplesPerPixel; i++) {
 
         // Die globale Pixelkoordinate und somit auch ray.dir werden jeden Sample etwas für Anti-Aliasing gejittert
-        float jitterX = randf(pixelSeed) - 0.5;
-        float jitterY = randf(pixelSeed) - 0.5;
+        float jitterX = randf(state) - 0.5;
+        float jitterY = randf(state) - 0.5;
         vec3 localPixelCoord = vec3(viewplane.topLeftCorner.x + viewplane.deltaU * (texelCoord.x + 0.5 + jitterX), viewplane.topLeftCorner.y + viewplane.deltaV * (texelCoord.y + 0.5 + jitterY), viewplane.topLeftCorner.z);
         vec3 globalPixelCoord = vec3((cam.transform * vec4(localPixelCoord, 1.0)).xyz);
         ray.dir = normalize(globalPixelCoord - cam.center);
 
-        totalLight += traceRay(ray, pixelSeed);
+        totalLight += traceRay(ray, state);
 
     }
     vec3 pixelColour = totalLight / samplesPerPixel;
@@ -243,7 +261,7 @@ HitInfo calculateClosestHit(Ray ray) {
         vec3 localRayDir = (invModelMatrices[i] * vec4(ray.dir, 0.0)).xyz;
         vec3 localRayOrigin = (invModelMatrices[i] * vec4(ray.origin, 1.0)).xyz;
         // Wird die AABB des Models nicht geschnitten, wird es übersprungen
-        vec3 localInvRayDir = 1.0 / normalize(localRayDir);
+        vec3 localInvRayDir = 1.0 / localRayDir;
         if(!intersectionAABB(localRayOrigin, localInvRayDir, modelAABBs[i])) {
             continue;
         }
@@ -277,72 +295,69 @@ HitInfo calculateClosestHit(Ray ray) {
     return closestHit;
 }
 
-float randf(inout uint pixelSeed) {
-    pixelSeed ^= pixelSeed >> 16;
-    pixelSeed *= 0x85ebca6b;
-    pixelSeed ^= pixelSeed >> 13;
-    pixelSeed *= 0xc2b2ae35;
-    pixelSeed ^= pixelSeed >> 16;
-    return pixelSeed / 4294967295.0;
+uint nextRandom(inout uint state) {
+    state = state * 747796405u + 2891336453u;
+    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    return (word >> 22u) ^ word;
 }
 
-vec3 traceRay(Ray ray, inout uint pixelSeed) {
+float randf(inout uint state) {
+    return float(nextRandom(state)) / 4294967295.0;
+}
 
-    vec3 rayColour = vec3(1.0);
-    vec3 incomingLight = vec3(0.0);
+vec3 randomOnUnitSphere(inout uint state) {
+    float u = randf(state);
+    float v = randf(state);
+    float theta = u * 2.0 * 3.14159265359;
+    float phi = acos(2.0 * v - 1.0);
+    
+    float x = sin(phi) * cos(theta);
+    float y = sin(phi) * sin(theta);
+    float z = cos(phi);
+    
+    return vec3(x, y, z);
+}
+
+vec3 traceRay(Ray ray, inout uint state) {
+
+    vec3 throughput = vec3(1.0); // throughput entspricht einem Faktor, der den Grad der Modifierung des Lichts einer später getroffenen Lichtquelle über den Strahlenweg beschreibt. Er bestimmt maßgeblich den Einfluss der BRDF auf incomingLight
+    vec3 incomingLight = vec3(0.0); // incomingLight entspricht L(erster Schnittpunkt, -ray.dir), also dem Licht, das vom ersten Schnittpunkt Richtung Kamera emittiert und reflektiert wird 
 
     for(int i = 0; i < maxBounceCount; i++) {
 
         HitInfo hitInfo = calculateClosestHit(ray);
 
         if(hitInfo.didHit) {
-
-             // Der neue, reflektierte Strahl wird berechnet
-            ray.origin = hitInfo.hitPoint + hitInfo.normal * 0.0001;
-
-            vec3 newDir = vec3(1.0, 1.0, 1.0);
-            int safetyLimit = 10;
-            int counter = 0;
-            while(newDir == vec3(1.0, 1.0, 1.0) && counter < safetyLimit) {
-                float x = randf(pixelSeed) * 2 - 1;
-                float y = randf(pixelSeed) * 2 - 1;
-                float z = randf(pixelSeed) * 2 - 1;
-
-                // Befindet sich die zufällig generierte neue Richtung innerhalb der Einheitssphäre, wird sie normiert und übernommen 
-                if(x * x + y * y + z * z <= 1) {
-                    newDir = normalize(vec3(x, y, z));
-                }
-                counter++;
-            }
-
-            // Werden zu viele Anläufe benötigt, wird der Fallback verwendet
-            if(counter >= safetyLimit) {
-                newDir = hitInfo.normal;
-            }
-
-            // Zeigt die neue Richtung ins Innere des Primitivs, wird sie umgekehrt
-            if(dot(newDir, hitInfo.normal) < 0.0) {
-                newDir *= -1;
-            }
-
+            
             Material material = hitInfo.material;
-            if (randf(pixelSeed) <= material.smoothness) {
-                ray.dir = reflect(ray.dir, hitInfo.normal);
-            } else {
-                ray.dir = newDir;
-            }
-    
-             // Das Licht des Strahl wird "absorbiert" bzw. vom Objekt getintet
-            rayColour *= material.colour * max(dot(hitInfo.normal, ray.dir), 0.0) * 2;
-                                        //     ^ Korrigiert die Helligkeit, da der Term geringer ist, je schräger das Licht einfällt
 
-            // Licht, das am Pixel einfällt wird aus der akkumulierten Farbe aller Objekte, 
-            // die der Strahl berührt hat (rayColour) und der Farbe/Stärke der getroffenen Lichtquelle (emittedLight) berechnet
-            vec3 emittedLight = material.emissionColour * material.emissionStrength;
-            incomingLight += rayColour * emittedLight;
-            if(material.emissionStrength != 0) {
+            // Der Strahl wird durch die BRDF reflektiert und unten gefiltert
+            vec3 diffuseDir = normalize(hitInfo.normal + randomOnUnitSphere(state));
+            vec3 specularDir = normalize(reflect(ray.dir, hitInfo.normal));
+            vec3 reflectedDir;
+            if(material.smoothness < randf(state)) {
+                reflectedDir = diffuseDir;
+            } else {
+                reflectedDir = specularDir;
+            }
+            
+            // Zeigt die neue Richtung ins Primitiv hinein, wird ein Fallback verwendet
+            if (dot(reflectedDir, hitInfo.normal) < 0.0) {
+                reflectedDir = hitInfo.normal; 
+            }
+
+            ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
+            ray.dir = reflectedDir;
+
+            vec3 emittedLight = material.emissionColour * material.emissionStrength; // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir vor der Reflexion) des getroffenen Punktes
+            incomingLight += throughput * emittedLight;
+            
+            if(material.emissionStrength != 0.0) {
                 break;
             }
+
+            // Das Licht des Strahl wird durch den Albedo des Objekts gefiltert
+            throughput *= material.colour;
             
         } else {
             break;

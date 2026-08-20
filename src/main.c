@@ -83,22 +83,20 @@ int main(int argc, char** argv) {
     // Szene wird definiert
 
     DynamicArray* materialInstanceTracker = createDynamicArray(sizeof(Material*), 1);
+    DynamicArray* sphereInstanceTracker = createDynamicArray(sizeof(Sphere*), 1);
+    ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
     Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, 0.0f, NULL, materialInstanceTracker);
     Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
-    Material* reflectiveWhiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 1.0f, NULL, materialInstanceTracker);
+    Material* reflectiveMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.9f, NULL, materialInstanceTracker);
     Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
     Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
     Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
 
-    DynamicArray* sphereInstanceTracker = createDynamicArray(sizeof(Sphere*), 1);
-
-    Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 2.0f}, 3.0f, reflectiveWhiteMaterial, false, sphereInstanceTracker);
+    Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 2.0f}, 3.0f, reflectiveMaterial, false, sphereInstanceTracker);
     
     uploadAllSpheres(sphereInstanceTracker, raytracer);
     disposeStaticSpheres(sphereInstanceTracker);
-
-    ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
     vec4 vertices[] = {
         // Koordinaten (X, Y, Z)          // Dummy/Padding (W)
@@ -151,7 +149,7 @@ int main(int argc, char** argv) {
         0.5f,  0.5f, -0.5f, 1.0f,
         -0.5f,  0.5f, -0.5f, 1.0f
     };
-    
+
     Model* lightSource = createModel(modelInstanceTracker, vertices, 36, lightMaterial, (vec3) {0.0f, 9.75f, 0.0f}, (vec3) {7.0f, 0.5f, 7.0f}, false);
 
     Model* backWall = createModel(modelInstanceTracker, vertices, 36, whiteMaterial, (vec3) {0.0f, 0.0f, -15.5f}, (vec3) {20.0f, 20.0f, 1.0f}, false);
@@ -172,7 +170,7 @@ int main(int argc, char** argv) {
 
     // Sonstige Uniforms werden festgelegt
     setInt(raytracer, "maxBounceCount", 5);
-    setInt(raytracer, "samplesPerPixel", 8);
+    setInt(raytracer, "samplesPerPixel", 32);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -187,7 +185,7 @@ int main(int argc, char** argv) {
 
     float lastFrame = glfwGetTime();
     int frameCount = 0;
-    int videoFrameCount = 2;
+    int videoFrameCount = 1;
     
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -201,7 +199,7 @@ int main(int argc, char** argv) {
         render(raytracer, texture, frameCount, true);
         frameCount++;
         //printf("%d\n", frameCount);
-        //renderVideo(raytracer, texture, &frameCount, 512, &videoFrameCount, 1, 3.0f, window);
+        //renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 2.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);
@@ -263,8 +261,8 @@ void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int fr
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
         // Bild wird in Datei geschrieben
-        char name[30];
-        snprintf(name, 30, "..\\output\\image%03d.png", *videoFrameCount);
+        char name[40];
+        snprintf(name, 40, "..\\output\\image%03d.png", *videoFrameCount);
         stbi_write_png(name, (int) WINDOW_WIDTH, WINDOW_HEIGHT, 4, pixels, (int) WINDOW_WIDTH * 4);
         free(pixels);
 
