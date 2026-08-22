@@ -86,12 +86,12 @@ int main(int argc, char** argv) {
     DynamicArray* sphereInstanceTracker = createDynamicArray(sizeof(Sphere*), 1);
     ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
-    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, 0.0f, NULL, materialInstanceTracker);
-    Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
-    Material* reflectiveMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.9f, NULL, materialInstanceTracker);
-    Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
-    Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
-    Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, 0.0f, NULL, materialInstanceTracker);
+    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, NULL, materialInstanceTracker);
+    Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* reflectiveMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {0.1f, 0.1f}, 0.8f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
 
     Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 2.0f}, 3.0f, reflectiveMaterial, false, sphereInstanceTracker);
     
@@ -99,6 +99,7 @@ int main(int argc, char** argv) {
     disposeStaticSpheres(sphereInstanceTracker);
 
     vec4 vertices[] = {
+
         // Koordinaten (X, Y, Z)          // Dummy/Padding (W)
 
         // Rückseite (Z = -0.5) - Blick von außen (Richtung +Z)
@@ -185,7 +186,7 @@ int main(int argc, char** argv) {
 
     float lastFrame = glfwGetTime();
     int frameCount = 0;
-    int videoFrameCount = 1;
+    int videoFrameCount = 0;
     
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -199,7 +200,7 @@ int main(int argc, char** argv) {
         render(raytracer, texture, frameCount, true);
         frameCount++;
         //printf("%d\n", frameCount);
-        //renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 2.0f, window);
+        //renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 1.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);

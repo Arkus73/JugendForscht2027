@@ -16,10 +16,11 @@ struct ViewPlane {
 };
 
 struct Material {
-    vec3 colour;
-    float smoothness;
+    vec3 albedo;
+    float metallic;
     vec3 emissionColour;
     float emissionStrength;
+    vec2 roughness;
 };
 
 struct Sphere {
@@ -56,9 +57,11 @@ uniform ViewPlane viewplane;
 #define SPHERE_COUNT 1
 uniform Sphere spheres[SPHERE_COUNT];
 
-#define CW_BACKFACE_CULLING
-//#define CCW_BACKFACE_CULLING
+#define CCW_WINDING_ORDER
+//#define CW_WINDING_ORDER
 //#define NO_CULLING
+#define CULLING
+
 #define EPSILON 0.00001
 #define MODEL_COUNT 7
 layout (std430, binding = 1) readonly buffer Models {
@@ -88,16 +91,16 @@ Also an sich beschreibt die Rendergleichung erstmal, wie viel Licht von einem Pu
 setzt sich zum einen aus Le(x, omega), der den Wert des in die Richtung omega emittierten Lichts beschreibt, und aus dem Integral über die BRDF, dem einfallenden Licht auf x
 L(x, omega strich) und dem Kosinus des Einfallswinkels zusammen.
 
-Die Lösung der Rendering-Gleichung erfolgt hier im Code numerisch, indem mehrere "Samples" durch traceRay() generiert werden, die L(x, omega) für einen konkreten Pfad mit maximaler Tiefe
+Die Lösung der Rendering-Gleichung erfolgt hier im Code numerisch mit der Monte-Carlo-Integration, indem mehrere "Samples" durch traceRay() generiert werden, die L(x, omega) für einen konkreten Pfad mit maximaler Tiefe
 maxBounceCount darstellen. 
 
 In traceRay() wird mithilfe der for-Schleife das Problem der unendlichen Rekursion durch die Tatsache, dass für die Berechnung von L(x, omega) immer auch L(x, omega strich) benötigt wird,
-was wiederum einem weiteren L(y, omega) aus Sicht des nächsten Schnittpunkts entspricht, gelöst. Dieses neue L(y, omega) wird mithilfe eines durch die BRDF randomisierten abgeprallten Strahls
-so lange berechnet, bis eine Lichtquelle getroffen wird und somit Le(x, omega) != 0 an dieser Stelle gilt oder bis maxBounceCount erreicht ist. Auf diesem Weg wird durch die BRDFs der 
-throughput modifiziert, der am Ende mit dem emittierten Licht am Strahlenende multipliziert wird, um den Einfluss der BRDFs aller Schnitte durchzusetzen. Durch das Cosine-
-Weighted Hemisphere Sampling kürzt sich der Cosinusterm aus der Gleichung heraus.
+was wiederum einem weiteren L(y, x - y) aus Sicht des nächsten Schnittpunkts entspricht, gelöst. Dieses neue L(y, x - y) wird mithilfe eines durch die PDF der BRDF randomisierten abgeprallten Strahls
+so lange berechnet, bis eine Lichtquelle getroffen wird und somit Le(x, omega) != 0 an dieser Stelle gilt oder bis maxBounceCount erreicht ist. Auf diesem Weg wird der throughput bei
+jedem Schnitt mit (BRDF * cos(theta)) / PDF multipliziert, um am Ende mit dem emittierten Licht am Strahlenende multipliziert zu werden, um den Einfluss der BRDFs aller Schnitte 
+durchzusetzen. Der Code orientiert sich folglich eher an der Pfadintegralschreibweise nach Veach anstatt der klassischen Rendergleichung.
 
-Diese Samples werden schlussendlich aufsummiert und gemittelt um das endgültige L(x, omega) zu erhalten, was als Pixelfarbe ausgegeben wird.
+Diese Samples werden schlussendlich gemäß der Monte Carlo Integration aufsummiert und gemittelt um das endgültige L(x, omega) zu erhalten, was als Pixelfarbe ausgegeben wird.
 
 */
 
@@ -175,13 +178,13 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     //                  ^ determinant(mat3(-ray.dir, E1, E2))
     float invBasicDet = 1.0 / basicDet;
     
-    #ifdef CW_BACKFACE_CULLING
+    #if defined(CULLING) && defined(CCW_WINDING_ORDER)
     // Ist die Determinante kleiner/größer als 0, ist das Dreieck ein Backface. Ist sie nahe an 0, steht ray.dir parallel zum Dreieck (da basicDet auch = -dot(ray.dir, cross(E1, E2)) und cross(E1, E2) = normal) und es wird discarded
     if(basicDet < EPSILON) {
         return hitInfo;
     }
     #endif
-    #ifdef CCW_BACKFACE_CULLING
+    #if defined(CULLING) && defined(CW_WINDING_ORDER)
     if(basicDet > EPSILON) {
         return hitInfo;
     }
@@ -218,13 +221,11 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     hitInfo.dist = t;
     hitInfo.hitPoint = ray.origin + ray.dir * t;
     hitInfo.material = triangle.material;
+
     hitInfo.normal = normalize(cross(E1, E2));
 
-    #ifdef NO_CULLING
-    // Für Backfaces wird die Normale zum Strahl gedreht, damit Shading ordentlich klappt
-    if(basicDet < 0.0) {
-        hitInfo.normal *= -1.0;
-    }
+    #ifdef CW_WINDING_ORDER
+    hitInfo.normal = -hitInfo.normal;
     #endif
 
     return hitInfo;
@@ -247,7 +248,7 @@ HitInfo calculateClosestHit(Ray ray) {
 
     HitInfo closestHit;
     closestHit.dist = 100000.0;
-    closestHit.material.colour = vec3(0.0, 0.0, 0.0);
+    closestHit.material.albedo = vec3(0.0, 0.0, 0.0);
 
     for(int i = 0; i < SPHERE_COUNT; i++) {
         HitInfo hitInfo = intersectionSphere(ray, spheres[i]);
@@ -327,27 +328,10 @@ vec3 traceRay(Ray ray, inout uint state) {
 
         HitInfo hitInfo = calculateClosestHit(ray);
 
+
         if(hitInfo.didHit) {
             
             Material material = hitInfo.material;
-
-            // Der Strahl wird durch die BRDF reflektiert und unten gefiltert
-            vec3 diffuseDir = normalize(hitInfo.normal + randomOnUnitSphere(state));
-            vec3 specularDir = normalize(reflect(ray.dir, hitInfo.normal));
-            vec3 reflectedDir;
-            if(material.smoothness < randf(state)) {
-                reflectedDir = diffuseDir;
-            } else {
-                reflectedDir = specularDir;
-            }
-            
-            // Zeigt die neue Richtung ins Primitiv hinein, wird ein Fallback verwendet
-            if (dot(reflectedDir, hitInfo.normal) < 0.0) {
-                reflectedDir = hitInfo.normal; 
-            }
-
-            ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
-            ray.dir = reflectedDir;
 
             vec3 emittedLight = material.emissionColour * material.emissionStrength; // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir vor der Reflexion) des getroffenen Punktes
             incomingLight += throughput * emittedLight;
@@ -356,9 +340,56 @@ vec3 traceRay(Ray ray, inout uint state) {
                 break;
             }
 
-            // Das Licht des Strahl wird durch den Albedo des Objekts gefiltert
-            throughput *= material.colour;
+            //#define COOK_TORRANCE_BRDF
+
+            #ifdef COOK_TORRANCE_BRDF
+            // Implementierung der BRDF nach dem Cook-Torrance Mikrofazettenmodell beschrieben in https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory
+
+            // Makrooberflächennormale
+            vec3 n = hitInfo.normal;
+            // Beobachtungsrichtung
+            vec3 wo = -ray.dir;
+
+            // Basisreflexionschance bei Einfallswinkel 90°
+            float F0 = mix(0.04, max(material.albedo.r, max(material.albedo.g, material.albedo.b)), material.metallic);
+            // Fresnel-Wert, also realistische Reflexionschance abhängig vom Einfallswinkel, Schlick-Approximation
+            float F = F0 + (1.0 - F0) * pow(1.0 - max(dot(n, wo), 0.0), 5.0);
+
+            if(F < randf(state)) {
+                // Diffuse-Anteil nach Lambert
+                ray.dir = normalize(hitInfo.normal + randomOnUnitSphere(state));
+                throughput *= (material.albedo * (1.0 - material.metallic)) / (1.0 - F);
+                /*                                                                 ^ Division durch Wahrscheinlichkeit des Pfads (-> korrekte Gewichtung bei 
+                der Monte Carlo Integration/Pendant zum d(omega strich) des Integrals der Rendergleichung) */
+            } else {
+                // Specular-Anteil nach Cook-Torrance
+                ray.dir = normalize(reflect(ray.dir, hitInfo.normal) + material.roughness.x * randomOnUnitSphere(state));
+                // Lichteinfallsrichtung
+                vec3 wi = -ray.dir;
+                throughput *= mix(vec3(0.04), material.albedo, material.metallic) / F;
+            }
+
+            ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
+
+            #else
             
+            float F0 = mix(0.04, max(material.albedo.r, max(material.albedo.g, material.albedo.b)), material.metallic);
+            float F = F0 + (1.0 - F0) * pow(1.0 - max(dot(hitInfo.normal, -ray.dir), 0.0), 5.0);
+
+            if(F < randf(state)) {
+                // Diffuse
+                ray.dir= normalize(hitInfo.normal + randomOnUnitSphere(state));
+                throughput *= (material.albedo * (1.0 - material.metallic)) / (1.0 - F);
+            } else {
+                // Specular
+                ray.dir = normalize(reflect(ray.dir, hitInfo.normal) + material.roughness.x * randomOnUnitSphere(state));
+                throughput *= mix(vec3(0.04), material.albedo, material.metallic) / F;
+            }
+
+            ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
+
+            #endif
+
         } else {
             break;
         }

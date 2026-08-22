@@ -61,7 +61,7 @@ Model* createModel(ModelInstanceTracker* modelInstanceTracker, vec4* vertices, i
     this->vertexOffset = modelInstanceTracker->totalVertexCount;
     extractBoundingBox(vertices, vertexCount, &this->boundingBox);
 
-    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC3_ZERO, 0.0f, 0.0f, material, NULL);
+    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC2_ZERO, 0.0f, GLM_VEC3_ZERO, 0.0f, material, NULL);;
     glm_vec3_copy(position, this->position);
     glm_vec3_copy(scale, this->scale);
     this->dynamic = dynamic;

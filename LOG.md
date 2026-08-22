@@ -14,9 +14,9 @@
 
 ### Raytracer PBR Materialien
 - [ X ] Einfaches Cosine-Weighted Sampling (ID: 6)
-- [  ] Fresnel implementieren (ID: 9)
-- [  ] Materialeigenschaften zu albedo, roughness, metallic erweitern (ID: 11)
-- [  ] Eine verbesserte, physikalisch korrekte BRDF implementieren (GGX) (ID: 12)
+- [ X ] Fresnel implementieren (ID: 9)
+- [ X ] Materialeigenschaften zu albedo, roughness, metallic erweitern (ID: 11)
+- [  ] Eine verbesserte, physikalisch korrekte BRDF implementieren (Cook-Torrance) (ID: 12)
 
 ### Recherche
 - [  ] Bei der THWS Schweinfurt Bib Ausweis beantragen (ID: 2)
@@ -46,7 +46,8 @@
     - Triangle Intersection im Model- statt Worldspace aufgrund der massiven Rechenlast durch Modelmatrix-Multiplikationen mit den Dreiecks-Vertices
     - AABB-Culling und dessen integration in die Model-Pipeline
 
-### [2026-08-17] - [TODO ID 6, 11]
+### [2026-08-17] - [TODO ID 6, 8, 11, 9]
 
 - Verringerung des Rauschens und somit Verbesserung der Bildqualität, sowie Verbesserung der Performance durch die Implementierung eines einfachen Cosine-Weighted Sampling Verfahrens
 - Recherche und Verständnis der Rendergleichung und Verbindung mit dem Code durch Kommentare
+- Vorbereitung des Codes für die Cook Torrance BRDF durch erweiterte Materialeigenschaften und den Fresnel und Verbesserung des vereinfachten Modells durch diese
