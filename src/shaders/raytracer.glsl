@@ -59,10 +59,13 @@ uniform Sphere spheres[SPHERE_COUNT];
 
 #define CCW_WINDING_ORDER
 //#define CW_WINDING_ORDER
-//#define NO_CULLING
-#define CULLING
+#define NO_CULLING
+//#define CULLING
 
-#define EPSILON 0.00001
+#define PI 3.14159
+#define SQR(num) (num * num)
+
+#define EPSILON 0.001
 #define MODEL_COUNT 7
 layout (std430, binding = 1) readonly buffer Models {
     ivec4 meshOffsetsAndVertexCounts[MODEL_COUNT];
@@ -228,6 +231,12 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     hitInfo.normal = -hitInfo.normal;
     #endif
 
+    // Rays can hit the inside of closed geometry (for example the Cornell box).
+    // Use a normal facing the incoming ray for the shading coordinate system.
+    if(dot(hitInfo.normal, ray.dir) > 0.0) {
+        hitInfo.normal = -hitInfo.normal;
+    }
+
     return hitInfo;
 }
 
@@ -309,7 +318,7 @@ float randf(inout uint state) {
 vec3 randomOnUnitSphere(inout uint state) {
     float u = randf(state);
     float v = randf(state);
-    float theta = u * 2.0 * 3.14159265359;
+    float theta = u * 2.0 * PI;
     float phi = acos(2.0 * v - 1.0);
     
     float x = sin(phi) * cos(theta);
@@ -317,6 +326,97 @@ vec3 randomOnUnitSphere(inout uint state) {
     float z = cos(phi);
     
     return vec3(x, y, z);
+}
+
+// Generiere einen Punkt auf der Einheitskreisscheibe
+vec2 sampleUniformDiskPolar(vec2 u) {
+    float r = sqrt(u.x);
+    float theta = 2.0 * PI * u.y;
+    return vec2(r * cos(theta), r * sin(theta));
+}
+
+// Generiere eine von der Rauheit der Oberfläche abhängige Mikrofazettennormale wm nach https://jcgt.org/published/0007/04/01/
+vec3 sampleWm(vec3 wo, vec2 alpha, inout uint state) {
+
+    vec3 vh = normalize(vec3(alpha.x * wo.x, alpha.y * wo.y, wo.z));
+
+    float lenSqr = SQR(vh.x) + SQR(vh.y);
+    vec3 T1 = (lenSqr > 0.0) ? vec3(-vh.y, vh.x, 0.0) / sqrt(lenSqr) : vec3(1.0, 0.0, 0.0);
+    vec3 T2 = cross(vh, T1);
+
+    vec2 t = sampleUniformDiskPolar(vec2(randf(state), randf(state)));
+    float s = 0.5 * (1.0 + vh.z);
+    t.y = (1.0 - s) * sqrt(1.0 - SQR(t.x)) + s * t.y;
+
+    vec3 nh = t.x * T1 + t.y * T2 + sqrt(max(0.0, 1.0 - SQR(t.x) - SQR(t.y))) * vh;
+    vec3 ne = normalize(vec3(alpha.x * nh.x, alpha.y * nh.y, max(0.0, nh.z)));
+    return ne;
+}   
+
+// Funktionen, die die Cosinüsse und Sinüsse der Sphärischen Koordinaten eines normalisierten Vektors zurückgeben
+
+float cosTheta(vec3 w) {
+    return w.z;
+}
+float cos2Theta(vec3 w) {
+    return SQR(w.z);
+}
+float sin2Theta(vec3 w) {
+    return max(0.0, 1.0 - cos2Theta(w));
+}
+float sinTheta(vec3 w) {
+    return sqrt(sin2Theta(w));
+}
+float tanTheta(vec3 w) {
+    return sinTheta(w) / cosTheta(w);
+}
+float tan2Theta(vec3 w) {
+    return sin2Theta(w) / cos2Theta(w);
+}
+float cosPhi(vec3 w) {
+    float sinTheta = sinTheta(w);
+    return (sinTheta == 0.0) ? 0.0 : clamp(w.x / sinTheta, -1.0, 1.0);
+}
+float sinPhi(vec3 w) {
+    float sinTheta = sinTheta(w);
+    return (sinTheta == 0.0) ? 0.0 : clamp(w.y / sinTheta, -1.0, 1.0);
+}
+
+// Die *N*ormal-*D*istribution-*F*unction beschreibt die relative Anzahl der Mikrofazetten, die in Richtung der gesampleten Normale wm zeigen.
+float GGX_NDF(vec3 wm, vec2 alpha) {
+    float tan2Theta = tan2Theta(wm);
+    if(isinf(tan2Theta)) return 0.0;
+    float cos4Theta = SQR(cos2Theta(wm));
+    float e = tan2Theta * (SQR(cosPhi(wm) / alpha.x) + SQR(sinPhi(wm) / alpha.y));
+    return 1.0 / (PI * alpha.x * alpha.y * cos4Theta * SQR(1 + e));
+}
+
+// Hilffunktion lambda für die Maskierungsfunktion G1 und die zusammengesetzte Maskierungs-/Schattierungsfunktion G
+float lambda(vec3 w, vec2 alpha) {
+    float tan2Theta = tan2Theta(w);
+    if(isinf(tan2Theta)) return 0.0;
+    float alphaSqr = SQR(alpha.x * cosPhi(w)) + SQR(alpha.y * sinPhi(w));
+    return (sqrt(1.0 + alphaSqr * tan2Theta) - 1.0) / 2.0;
+}
+
+float G1(vec3 w, vec2 alpha) {
+    return 1.0 / (1.0 + lambda(w, alpha));
+}
+
+float G(vec3 wo, vec3 wi, vec2 alpha) {
+    return 1.0 / (1.0 + lambda(wo, alpha) + lambda(wi, alpha));
+}
+
+void buildOrthonormalBasis(vec3 n, out vec3 t, out vec3 b) {
+    if (n.z < -0.9999999) {
+        t = vec3(0.0, -1.0, 0.0);
+        b = vec3(-1.0, 0.0, 0.0);
+        return;
+    }
+    float a = 1.0 / (1.0 + n.z);
+    float h = -n.x * n.y * a;
+    t = vec3(1.0 - n.x * n.x * a, h, -n.x);
+    b = vec3(h, 1.0 - n.y * n.y * a, -n.y);
 }
 
 vec3 traceRay(Ray ray, inout uint state) {
@@ -328,19 +428,18 @@ vec3 traceRay(Ray ray, inout uint state) {
 
         HitInfo hitInfo = calculateClosestHit(ray);
 
-
         if(hitInfo.didHit) {
             
             Material material = hitInfo.material;
 
-            vec3 emittedLight = material.emissionColour * material.emissionStrength; // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir vor der Reflexion) des getroffenen Punktes
+            vec3 emittedLight = material.emissionColour * material.emissionStrength; // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir) des getroffenen Punktes
             incomingLight += throughput * emittedLight;
             
             if(material.emissionStrength != 0.0) {
                 break;
             }
 
-            //#define COOK_TORRANCE_BRDF
+            #define COOK_TORRANCE_BRDF
 
             #ifdef COOK_TORRANCE_BRDF
             // Implementierung der BRDF nach dem Cook-Torrance Mikrofazettenmodell beschrieben in https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory
@@ -348,25 +447,46 @@ vec3 traceRay(Ray ray, inout uint state) {
             // Makrooberflächennormale
             vec3 n = hitInfo.normal;
             // Beobachtungsrichtung
-            vec3 wo = -ray.dir;
+            vec3 woGlobal = -ray.dir;
+
+            // wo wird für die Berechnungen in den Normalenraum transformiert
+            vec3 t, b;
+            buildOrthonormalBasis(n, t, b);
+            mat3 localToGlobal = mat3(t, b, n);
+            vec3 wo = transpose(localToGlobal) * woGlobal;
+
+            // Die wahrgenommene Rauheit wird in die tatsächliche Rauheit alpha umgewandelt
+            vec2 alpha = max(SQR(material.roughness), vec2(EPSILON));
+            // Es wird eine zufällige Mikrofazettennormale generiert und der Strahl an ihr reflektiert
+            vec3 wm = sampleWm(wo, alpha, state);
+
 
             // Basisreflexionschance bei Einfallswinkel 90°
-            float F0 = mix(0.04, max(material.albedo.r, max(material.albedo.g, material.albedo.b)), material.metallic);
+            vec3 F0 = mix(vec3(0.04), material.albedo, material.metallic);
             // Fresnel-Wert, also realistische Reflexionschance abhängig vom Einfallswinkel, Schlick-Approximation
-            float F = F0 + (1.0 - F0) * pow(1.0 - max(dot(n, wo), 0.0), 5.0);
+            vec3 F = F0 + (vec3(1.0) - F0) * pow(1.0 - max(dot(wm, wo), 0.0), 5.0);
 
-            if(F < randf(state)) {
+            float p = dot(F, vec3(0.2126, 0.7152, 0.0722));
+            p = clamp(p, EPSILON, 1.0 - EPSILON);
+
+            if(p < randf(state)) {
                 // Diffuse-Anteil nach Lambert
-                ray.dir = normalize(hitInfo.normal + randomOnUnitSphere(state));
-                throughput *= (material.albedo * (1.0 - material.metallic)) / (1.0 - F);
-                /*                                                                 ^ Division durch Wahrscheinlichkeit des Pfads (-> korrekte Gewichtung bei 
-                der Monte Carlo Integration/Pendant zum d(omega strich) des Integrals der Rendergleichung) */
+                ray.dir = normalize(n + randomOnUnitSphere(state));
+                throughput *= material.albedo * (1.0 - material.metallic) / (1.0 - p);
+                
             } else {
-                // Specular-Anteil nach Cook-Torrance
-                ray.dir = normalize(reflect(ray.dir, hitInfo.normal) + material.roughness.x * randomOnUnitSphere(state));
+                // Specular-Anteil nach Cook-Torrance mit VNDF-Sampling
+
                 // Lichteinfallsrichtung
-                vec3 wi = -ray.dir;
-                throughput *= mix(vec3(0.04), material.albedo, material.metallic) / F;
+                vec3 wi = reflect(-wo, wm);    
+
+                // Entspricht der gekürzten Form des Beitrags bei GGX VNDF Importance Sampling. Siehe Notizen für Herleitung
+                throughput *= F * (G(wi, wo, alpha) / G1(wo, alpha)) / p;
+                /*                                                     ^ Division durch Wahrscheinlichkeit des Pfads (-> korrekte Gewichtung bei 
+                der Monte Carlo Integration/Pendant zum d(omega strich) des Integrals der Rendergleichung), Teil des / p(wi) der Formel für ein throughput-weight */
+
+                // wi wird aus dem Normalenraum wieder in den globalen Raum transformiert
+                ray.dir = normalize(localToGlobal * wi);
             }
 
             ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
@@ -382,7 +502,7 @@ vec3 traceRay(Ray ray, inout uint state) {
                 throughput *= (material.albedo * (1.0 - material.metallic)) / (1.0 - F);
             } else {
                 // Specular
-                ray.dir = normalize(reflect(ray.dir, hitInfo.normal) + material.roughness.x * randomOnUnitSphere(state));
+                ray.dir = normalize(reflect(ray.dir, hitInfo.normal) + SQR(material.roughness.x) * randomOnUnitSphere(state));
                 throughput *= mix(vec3(0.04), material.albedo, material.metallic) / F;
             }
 

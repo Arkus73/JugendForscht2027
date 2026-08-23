@@ -186,7 +186,7 @@ int main(int argc, char** argv) {
 
     float lastFrame = glfwGetTime();
     int frameCount = 0;
-    int videoFrameCount = 0;
+    int videoFrameCount = 1;
     
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -200,7 +200,7 @@ int main(int argc, char** argv) {
         render(raytracer, texture, frameCount, true);
         frameCount++;
         //printf("%d\n", frameCount);
-        //renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 1.0f, window);
+        //renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 2.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);
