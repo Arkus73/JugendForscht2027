@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     useShader(raytracer);
 
     // Viewplane-Werte werden aus Kamerawerten berechnet und an den Compute Shader gesendet
-    float FOV = glm_rad(60.0f);
+    float FOV = glm_rad(65.0f);
     // Abstand der Bildebene vom "Auge"
     float focalLength = 1.0f;
 
@@ -72,13 +72,12 @@ int main(int argc, char** argv) {
     setFloat(raytracer, "viewplane.deltaV", deltaV);
 
     // Nötige Kameradaten werden an den Shader geschickt
-    vec3 camCenter = {0.0f, 0.0f, 14.0f};
+    vec3 camCenter = {0.0f, 0.0f, 14.9f};
     setVec3(raytracer, "cam.center", camCenter);
     mat4 camTransform;
     glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
     glm_mat4_inv(camTransform, camTransform);
     setMatrix(raytracer, "cam.transform", camTransform);
-
 
     // Szene wird definiert
 
@@ -86,16 +85,18 @@ int main(int argc, char** argv) {
     DynamicArray* sphereInstanceTracker = createDynamicArray(sizeof(Sphere*), 1);
     ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
-    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, NULL, materialInstanceTracker);
-    Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* reflectiveMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {0.1f, 0.1f}, 0.8f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, NULL, materialInstanceTracker);
+    Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* refractiveMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {0.0f, 0.0f}, 0.0f, 1.0f, 2.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    Material* bleenMaterial = createMaterial((vec3) {0.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
 
-    Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 2.0f}, 3.0f, reflectiveMaterial, false, sphereInstanceTracker);
-    
-    uploadAllSpheres(sphereInstanceTracker, raytracer);
+    Sphere* sphere = createSphere((vec3) {-2.0f, 0.0f, 10.0f}, 1.0f, refractiveMaterial, false, sphereInstanceTracker);
+
+    unsigned int sphereSSBO = prepareSphereSSBO(sphereInstanceTracker);
+    uploadAllSpheres(sphereInstanceTracker, sphereSSBO);
     disposeStaticSpheres(sphereInstanceTracker);
 
     vec4 vertices[] = {
@@ -162,7 +163,9 @@ int main(int argc, char** argv) {
     Model* leftWall = createModel(modelInstanceTracker, vertices, 36, redMaterial, (vec3) {-10.5f, 0.0f, 0.0f}, (vec3) {1.0f, 20.0f, 30.0f}, false);
     Model* rightWall = createModel(modelInstanceTracker, vertices, 36, blueMaterial, (vec3) {10.5f, 0.0f, 0.0f}, (vec3) {1.0f, 20.0f, 30.0f}, false);
 
-    unsigned int modelSSBO = prepareSSBO(modelInstanceTracker);
+    Model* refractiveCube = createModel(modelInstanceTracker, vertices, 36, refractiveMaterial, (vec3) {2.0f, 0.0f, 10.0f}, (vec3) {1.0f, 1.0f, 1.0f}, false);
+
+    unsigned int modelSSBO = prepareModelSSBO(modelInstanceTracker);
 
     uploadAllModels(modelInstanceTracker, modelSSBO);
     disposeStaticModels(modelInstanceTracker);
@@ -170,8 +173,8 @@ int main(int argc, char** argv) {
     disposeMaterialBlueprints(materialInstanceTracker);
 
     // Sonstige Uniforms werden festgelegt
-    setInt(raytracer, "maxBounceCount", 5);
-    setInt(raytracer, "samplesPerPixel", 32);
+    setInt(raytracer, "maxBounceCount", 10);
+    setInt(raytracer, "samplesPerPixel", 16);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -200,7 +203,7 @@ int main(int argc, char** argv) {
         render(raytracer, texture, frameCount, true);
         frameCount++;
         //printf("%d\n", frameCount);
-        //renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 2.0f, window);
+        renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 2.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);
@@ -219,6 +222,8 @@ int main(int argc, char** argv) {
     glDeleteProgram(raytracer.ID);
 
     deinitModelInstanceTracker(modelInstanceTracker);
+    destroyDynamicArray(materialInstanceTracker);
+    destroyDynamicArray(sphereInstanceTracker);
 
     glfwTerminate();
     glfwDestroyWindow(window);
@@ -270,11 +275,18 @@ void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int fr
         float delta = 1.0 / (int) FPS;
         float time = *videoFrameCount * delta;
         // Hier Bewegung einfügen
+        vec3 camCenter = {-3.0f + time * 3.0f, 0.0f, 14.9f};
+        setVec3(raytracer, "cam.center", camCenter);
+        mat4 camTransform;
+        glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
+        glm_mat4_inv(camTransform, camTransform);
+        setMatrix(raytracer, "cam.transform", camTransform);
         
         // Wurde das letzte Bild gerendert, wird das Programm geschlossen
         if(*videoFrameCount >= (int) (videoLength * FPS)) {
             glfwSetWindowShouldClose(window, true);
-            printf("Rendering time: %.2f", glfwGetTime());
+            printf("Total rendering time: %.2f\n", glfwGetTime());
+            printf("Average rendering time per frame: %.2f", glfwGetTime() / (float) *videoFrameCount);
         }
     }
 }

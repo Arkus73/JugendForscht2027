@@ -12,7 +12,6 @@ typedef struct {
     float radius;
     bool dynamic;
     Material* material;
-    char attribPrefix[20];
 } Sphere;
 
 Sphere* createSphere(vec3 center, float radius, Material* material, bool dynamic, DynamicArray* sphereInstanceTracker);
@@ -20,10 +19,11 @@ void destroySphere(Sphere* this);
 void destroyAllSpheres(DynamicArray* sphereInstanceTracker);
 void disposeStaticSpheres(DynamicArray* sphereInstanceTracker);
 
-void uploadSphere(Sphere* this, Shader raytracer);
-void uploadAllSpheres(DynamicArray* sphereInstanceTracker, Shader raytracer);
-void uploadSphereSpatialData(Sphere* this, Shader raytracer);
-void uploadSphereMaterialData(Sphere* this, Shader raytracer);
+unsigned int prepareSphereSSBO(DynamicArray* sphereInstanceTracker);
+void uploadSphereSpatialData(Sphere* this, unsigned int sphereSSBO);
+void uploadSphereMaterialData(Sphere* this, DynamicArray* sphereInstanceTracker, unsigned int sphereSSBO);
+void uploadSphere(Sphere* this, DynamicArray* sphereInstanceTracker, unsigned int sphereSSBO);
+void uploadAllSpheres(DynamicArray* sphereInstanceTracker, unsigned int sphereSSBO);
 
 
 #endif

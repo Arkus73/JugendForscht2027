@@ -21,6 +21,8 @@ struct Material {
     vec3 emissionColour;
     float emissionStrength;
     vec2 roughness;
+    float transmittance;
+    float IOR;
 };
 
 struct Sphere {
@@ -41,6 +43,8 @@ struct AABB {
 struct Ray {
     vec3 origin;
     vec3 dir;
+    float currentIOR;
+    float distInMaterial;
 };
 
 struct HitInfo {
@@ -55,7 +59,10 @@ uniform Camera cam;
 uniform ViewPlane viewplane;
 
 #define SPHERE_COUNT 1
-uniform Sphere spheres[SPHERE_COUNT];
+layout (std430, binding = 2) readonly buffer Spheres {
+    vec4 sphereSpatialData[SPHERE_COUNT];
+    Material sphereMaterials[SPHERE_COUNT];
+};
 
 #define CCW_WINDING_ORDER
 //#define CW_WINDING_ORDER
@@ -63,10 +70,10 @@ uniform Sphere spheres[SPHERE_COUNT];
 //#define CULLING
 
 #define PI 3.14159
-#define SQR(num) (num * num)
+#define SQR(num) ((num) * (num))
 
 #define EPSILON 0.001
-#define MODEL_COUNT 7
+#define MODEL_COUNT 8
 layout (std430, binding = 1) readonly buffer Models {
     ivec4 meshOffsetsAndVertexCounts[MODEL_COUNT];
     mat4 modelMatrices[MODEL_COUNT];
@@ -112,8 +119,7 @@ void main() {
     // Ein pixel- und frameabhängiger Seed wird aus dem gehashten Texel-Koordinaten mit dem Frame-Spezifischen Seed gemischt
     uint state  = (texelCoord.x * 73856093) ^ (texelCoord.y * 19349663) ^ (frameSeed * 83492791);
     
-    Ray ray;
-    ray.origin = cam.center;
+    Ray ray = {cam.center, vec3(0.0), 1.0, 0.0};
     
     vec3 totalLight = vec3(0.0);
     for(int i = 0; i < samplesPerPixel; i++) {
@@ -145,19 +151,29 @@ HitInfo intersectionSphere(Ray ray, Sphere sphere) {
     float discriminant = b * b - 4 * a * c;
 
     HitInfo hitInfo;
+    // Ist die Diskriminante kleiner als 0, so gibt es keine Schnittpunkte
     if(discriminant >= 0) {
         // dist entspricht dem Skalar in der Geradengleichung und ist außerdem die Distanz, da ray.dir normiert ist
-        float dist = (-b - sqrt(discriminant)) / (2 * a);
+        float distA = (-b - sqrt(discriminant)) / (2 * a);
+        float distB = (-b + sqrt(discriminant)) / (2 * a);
+        float dist;
 
         // Ist dist kleiner als 0, so befindet sich der Schnittpunkt hinter dem Strahl und ist ungültig
-        if(dist >= 0) {
-            hitInfo.didHit = true;
-            hitInfo.dist = dist;
-            hitInfo.hitPoint = ray.origin + dist * ray.dir;
-            hitInfo.material = sphere.material;
-            hitInfo.normal = normalize(hitInfo.hitPoint - sphere.center);
+        if(distA >= 0.0) {
+            dist = distA;
+        } else if(distB >= 0.0) {
+            dist = distB;
+        } else {
+            hitInfo.didHit = false;
             return hitInfo;
         }
+
+        hitInfo.didHit = true;
+        hitInfo.dist = dist;
+        hitInfo.hitPoint = ray.origin + dist * ray.dir;
+        hitInfo.material = sphere.material;
+        hitInfo.normal = normalize(hitInfo.hitPoint - sphere.center);
+        return hitInfo;
 
     }
     hitInfo.didHit = false;
@@ -231,12 +247,6 @@ HitInfo intersectionTriangle(Ray ray, Triangle triangle) {
     hitInfo.normal = -hitInfo.normal;
     #endif
 
-    // Rays can hit the inside of closed geometry (for example the Cornell box).
-    // Use a normal facing the incoming ray for the shading coordinate system.
-    if(dot(hitInfo.normal, ray.dir) > 0.0) {
-        hitInfo.normal = -hitInfo.normal;
-    }
-
     return hitInfo;
 }
 
@@ -260,7 +270,8 @@ HitInfo calculateClosestHit(Ray ray) {
     closestHit.material.albedo = vec3(0.0, 0.0, 0.0);
 
     for(int i = 0; i < SPHERE_COUNT; i++) {
-        HitInfo hitInfo = intersectionSphere(ray, spheres[i]);
+        Sphere sphere = {sphereSpatialData[i].xyz, sphereSpatialData[i].w, sphereMaterials[i]};
+        HitInfo hitInfo = intersectionSphere(ray, sphere);
         if(hitInfo.didHit && hitInfo.dist < closestHit.dist) {
             closestHit = hitInfo;
         }
@@ -282,7 +293,7 @@ HitInfo calculateClosestHit(Ray ray) {
         int meshVertexCount = meshOffsetsAndVertexCounts[i].y;
 
         // Es wird über die Vertices des Meshes iteriert und je 3 Vertices der Möller-Trumbore-Algorithmus mit dem transformierten, Model-lokalen Ray durchgeführt
-        Ray localRay = {localRayOrigin, localRayDir};
+        Ray localRay = {localRayOrigin, localRayDir, ray.currentIOR, ray.distInMaterial};
         mat4 normalMatrix = transpose(invModelMatrices[i]);
         for(int j = meshOffset; j < meshOffset + meshVertexCount; j += 3) {
 
@@ -358,6 +369,9 @@ vec3 sampleWm(vec3 wo, vec2 alpha, inout uint state) {
 float cosTheta(vec3 w) {
     return w.z;
 }
+float absCosTheta(vec3 w) {
+    return abs(w.z);
+}
 float cos2Theta(vec3 w) {
     return SQR(w.z);
 }
@@ -408,15 +422,17 @@ float G(vec3 wo, vec3 wi, vec2 alpha) {
 }
 
 void buildOrthonormalBasis(vec3 n, out vec3 t, out vec3 b) {
-    if (n.z < -0.9999999) {
-        t = vec3(0.0, -1.0, 0.0);
-        b = vec3(-1.0, 0.0, 0.0);
-        return;
-    }
-    float a = 1.0 / (1.0 + n.z);
-    float h = -n.x * n.y * a;
-    t = vec3(1.0 - n.x * n.x * a, h, -n.x);
-    b = vec3(h, 1.0 - n.y * n.y * a, -n.y);
+    vec3 up = (abs(n.z) < 0.9) ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+    t = normalize(cross(up, n));
+    b = cross(t, n);
+}
+
+float GGX_VNDF(vec3 wo, vec3 wm, vec2 alpha) {
+    return (G1(wo, alpha) / abs(cosTheta(wo))) * GGX_NDF(wm, alpha) * max(dot(wo, wm), 0.0);
+}
+
+bool sameHemisphere(vec3 w1, vec3 w2) {
+    return w1.z * w2.z > 0.0;
 }
 
 vec3 traceRay(Ray ray, inout uint state) {
@@ -439,13 +455,14 @@ vec3 traceRay(Ray ray, inout uint state) {
                 break;
             }
 
-            #define COOK_TORRANCE_BRDF
-
-            #ifdef COOK_TORRANCE_BRDF
-            // Implementierung der BRDF nach dem Cook-Torrance Mikrofazettenmodell beschrieben in https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory
-
             // Makrooberflächennormale
-            vec3 n = hitInfo.normal;
+            vec3 geometricNormal = hitInfo.normal;
+            bool frontface = dot(geometricNormal, -ray.dir) > 0.0;
+            vec3 n = geometricNormal;
+            if(!frontface) {
+                n = -n;
+            }
+
             // Beobachtungsrichtung
             vec3 woGlobal = -ray.dir;
 
@@ -453,6 +470,7 @@ vec3 traceRay(Ray ray, inout uint state) {
             vec3 t, b;
             buildOrthonormalBasis(n, t, b);
             mat3 localToGlobal = mat3(t, b, n);
+            //      transpose entspricht hier inverse, da die Spaltenvektoren orthonormal sind
             vec3 wo = transpose(localToGlobal) * woGlobal;
 
             // Die wahrgenommene Rauheit wird in die tatsächliche Rauheit alpha umgewandelt
@@ -460,55 +478,69 @@ vec3 traceRay(Ray ray, inout uint state) {
             // Es wird eine zufällige Mikrofazettennormale generiert und der Strahl an ihr reflektiert
             vec3 wm = sampleWm(wo, alpha, state);
 
+            // BxDF-, PDF- und Teil-Formeln aus https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory; Siehe Notizen für gekürzte Throughput-Weight Herleitungen
+            if(material.transmittance < EPSILON) {
+                // BRDF
 
-            // Basisreflexionschance bei Einfallswinkel 90°
-            vec3 F0 = mix(vec3(0.04), material.albedo, material.metallic);
-            // Fresnel-Wert, also realistische Reflexionschance abhängig vom Einfallswinkel, Schlick-Approximation
-            vec3 F = F0 + (vec3(1.0) - F0) * pow(1.0 - max(dot(wm, wo), 0.0), 5.0);
+                // Basisspekularreflexionschance bei Einfallswinkel 90°
+                vec3 F0 = mix(vec3(0.04), material.albedo, material.metallic);
+                // Fresnel-Wert, also realistische Spekularreflexionschance abhängig vom Einfallswinkel, Schlick-Approximation
+                vec3 F = F0 + (vec3(1.0) - F0) * pow(1.0 - min(abs(dot(wm, wo)), 1.0 - EPSILON), 5.0);
 
-            float p = dot(F, vec3(0.2126, 0.7152, 0.0722));
-            p = clamp(p, EPSILON, 1.0 - EPSILON);
+                float pSpecular = dot(F, vec3(0.2126, 0.7152, 0.0722));
 
-            if(p < randf(state)) {
-                // Diffuse-Anteil nach Lambert
-                ray.dir = normalize(n + randomOnUnitSphere(state));
-                throughput *= material.albedo * (1.0 - material.metallic) / (1.0 - p);
+                if(pSpecular < randf(state)) {
+                    // Diffuse-Anteil nach Lambert
+                    ray.dir = normalize(n + randomOnUnitSphere(state));
+                    throughput *= material.albedo * (1.0 - material.metallic) / ((1.0 - pSpecular));
+                    
+                } else {
+                    // Specular-Anteil nach Torrance-Sparrow
+                    // Lichteinfallsrichtung
+                    vec3 wi = reflect(-wo, wm);    
+                    if(!sameHemisphere(wo, wi)) return vec3(0.0);
+
+                    throughput *= (F * dot(wo, wm) * G(wi, wo, alpha)) / (G1(wo, alpha) * max(dot(wo, wm), 0.0) * pSpecular);
+
+                    // wi wird aus dem Normalenraum wieder in den globalen Raum transformiert
+                    ray.dir = normalize(localToGlobal * wi);
+                }
+
+                ray.origin = hitInfo.hitPoint + geometricNormal * EPSILON;
+
+            } else {
+                // BSDF
+                float etao = ray.currentIOR;
+                float etai = (frontface) ? material.IOR : 1.0;
+                float eta = etao / etai;
+
+                vec3 wiRefracted = refract(-wo, wm, eta);
+                bool TIR = dot(wiRefracted, wiRefracted) < EPSILON;
+
+                float F;
+                // Abfangen von möglichen Totalreflexionen (TIR)
+                if(TIR) {
+                    F = 1.0;
+                } else {
+                    float F0 = pow((etai - etao) / (etai + etao), 2.0);
+                    F = F0 + (1.0 - F0) * pow(1.0 - min(dot(wm, wo), 1.0 - EPSILON), 5.0);
+                }
+
+                vec3 wi;
+                if(F < randf(state)) {
+                    wi = wiRefracted;
+                    throughput *= (G(wi, wo, alpha) * abs(dot(wi, wm))) / (G1(wo, alpha) * max(dot(wo, wm), 0.0));
+                    ray.currentIOR = etai;
+                } else {
+                    wi = reflect(-wo, wm);
+                    throughput *= (dot(wo, wm) * G(wi, wo, alpha)) / (G1(wo, alpha) * max(dot(wo, wm), 0.0));
+                }
                 
-            } else {
-                // Specular-Anteil nach Cook-Torrance mit VNDF-Sampling
-
-                // Lichteinfallsrichtung
-                vec3 wi = reflect(-wo, wm);    
-
-                // Entspricht der gekürzten Form des Beitrags bei GGX VNDF Importance Sampling. Siehe Notizen für Herleitung
-                throughput *= F * (G(wi, wo, alpha) / G1(wo, alpha)) / p;
-                /*                                                     ^ Division durch Wahrscheinlichkeit des Pfads (-> korrekte Gewichtung bei 
-                der Monte Carlo Integration/Pendant zum d(omega strich) des Integrals der Rendergleichung), Teil des / p(wi) der Formel für ein throughput-weight */
-
-                // wi wird aus dem Normalenraum wieder in den globalen Raum transformiert
-                ray.dir = normalize(localToGlobal * wi);
+                vec3 wiGlobal = normalize(localToGlobal * wi);
+                ray.dir = wiGlobal;
+                ray.origin = (dot(wiGlobal, geometricNormal) < 0.0) ? hitInfo.hitPoint - geometricNormal * EPSILON : hitInfo.hitPoint + geometricNormal * EPSILON;
             }
 
-            ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
-
-            #else
-            
-            float F0 = mix(0.04, max(material.albedo.r, max(material.albedo.g, material.albedo.b)), material.metallic);
-            float F = F0 + (1.0 - F0) * pow(1.0 - max(dot(hitInfo.normal, -ray.dir), 0.0), 5.0);
-
-            if(F < randf(state)) {
-                // Diffuse
-                ray.dir= normalize(hitInfo.normal + randomOnUnitSphere(state));
-                throughput *= (material.albedo * (1.0 - material.metallic)) / (1.0 - F);
-            } else {
-                // Specular
-                ray.dir = normalize(reflect(ray.dir, hitInfo.normal) + SQR(material.roughness.x) * randomOnUnitSphere(state));
-                throughput *= mix(vec3(0.04), material.albedo, material.metallic) / F;
-            }
-
-            ray.origin = hitInfo.hitPoint + hitInfo.normal * EPSILON;
-
-            #endif
 
         } else {
             break;

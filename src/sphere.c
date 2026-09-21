@@ -1,12 +1,10 @@
 #include <cglm/cglm.h>
+#include <glad/glad.h>
 #include "material.h"
 #include "shader.h"
 #include "sphere.h"
 #include "string.h"
 #include "utils.h"
-
-#define NUM_ATTRIBS 7
-char attribSuffixes[NUM_ATTRIBS][50] = {"center", "radius", "material.albedo", "material.roughness", "material.metallic", "material.emissionColour", "material.emissionStrength"};
 
 Sphere* createSphere(vec3 center, float radius, Material* material, bool dynamic, DynamicArray* sphereInstanceTracker) {
 
@@ -19,8 +17,7 @@ Sphere* createSphere(vec3 center, float radius, Material* material, bool dynamic
     glm_vec3_copy(center, this->center);
     this->radius = radius;
     this->dynamic = dynamic;
-    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC2_ZERO, 0.0f, GLM_VEC3_ZERO, 0.0f, material, NULL);
-    snprintf(this->attribPrefix, 20, "spheres[%d].", this->index);
+    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC2_ZERO, 0.0f, 0.0f, 0.0f, GLM_VEC3_ZERO, 0.0f, material, NULL);
 
     addToDynamicArray(sphereInstanceTracker, &this);
 
@@ -58,52 +55,32 @@ void disposeStaticSpheres(DynamicArray* sphereInstanceTracker) {
     }
 }
 
-void uploadSphere(Sphere* this, Shader raytracer) {
-
-    char attribs[NUM_ATTRIBS][60] = {"", "", "", "", "", "", ""};
-    for(int i = 0; i < NUM_ATTRIBS; i++) {
-        strcat(attribs[i], this->attribPrefix);
-        strcat(attribs[i], attribSuffixes[i]);
-    }
-
-    setVec3(raytracer, attribs[0], this->center);
-    setFloat(raytracer, attribs[1], this->radius);
-    setVec3(raytracer, attribs[2], this->material->albedo);
-    setVec2(raytracer, attribs[3], this->material->roughness);
-    setFloat(raytracer, attribs[4], this->material->metallic);
-    setVec3(raytracer, attribs[5], this->material->emissionColour);
-    setFloat(raytracer, attribs[6], this->material->emissionStrength);
+unsigned int prepareSphereSSBO(DynamicArray* sphereInstanceTracker) {
+    unsigned int sphereSSBO;
+    glGenBuffers(1, &sphereSSBO);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, sphereSSBO);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sphereInstanceTracker->len * (sizeof(vec4) + sizeof(Material)), NULL, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, sphereSSBO);
+    return sphereSSBO;
 }
 
-void uploadAllSpheres(DynamicArray* sphereInstanceTracker, Shader raytracer) {
+void uploadSphereSpatialData(Sphere* this, unsigned int sphereSSBO) {
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, sphereSSBO);
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, this->index * sizeof(vec4), sizeof(vec4), (vec4) {this->center[0], this->center[1], this->center[2], this->radius});
+}
+
+void uploadSphereMaterialData(Sphere* this, DynamicArray* sphereInstanceTracker, unsigned int sphereSSBO) {
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, sphereSSBO);
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, sphereInstanceTracker->len * sizeof(vec4) + this->index * sizeof(Material), sizeof(Material), this->material);
+}
+
+void uploadSphere(Sphere* this, DynamicArray* sphereInstanceTracker, unsigned int sphereSSBO) {
+    uploadSphereSpatialData(this, sphereSSBO);
+    uploadSphereMaterialData(this, sphereInstanceTracker, sphereSSBO);
+}
+
+void uploadAllSpheres(DynamicArray* sphereInstanceTracker, unsigned int sphereSSBO) {
     for(int i = 0; i < sphereInstanceTracker->len; i++) {
-        uploadSphere(TO_VALUE(Sphere*) getFromDynamicArray(sphereInstanceTracker, i), raytracer);
+        uploadSphere(TO_VALUE(Sphere*) getFromDynamicArray(sphereInstanceTracker, i), sphereInstanceTracker, sphereSSBO);
     }
-}
-
-void uploadSphereSpatialData(Sphere* this, Shader raytracer) {
-
-    char attribs[2][60] = {"", ""};
-    for(int i = 0; i < 2; i++) {
-        strcat(attribs[i], this->attribPrefix);
-        strcat(attribs[i], attribSuffixes[i]);
-    }
-
-    setVec3(raytracer, attribs[0], this->center);
-    setFloat(raytracer, attribs[1], this->radius);
-}
-
-void uploadSphereMaterialData(Sphere* this, Shader raytracer) {
-
-    char attribs[NUM_ATTRIBS - 2][60] = {"", "", "", "", ""};
-    for(int i = 0; i < NUM_ATTRIBS - 2; i++) {
-        strcat(attribs[i], this->attribPrefix);
-        strcat(attribs[i], attribSuffixes[i + 2]);
-    }
-
-    setVec3(raytracer, attribs[0], this->material->albedo);
-    setVec2(raytracer, attribs[1], this->material->roughness);
-    setFloat(raytracer, attribs[2], this->material->metallic);
-    setVec3(raytracer, attribs[3], this->material->emissionColour);
-    setFloat(raytracer, attribs[4], this->material->emissionStrength);
 }

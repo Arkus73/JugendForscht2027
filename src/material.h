@@ -10,10 +10,11 @@ typedef struct {
     vec3 emissionColour;
     float emissionStrength;
     vec2 roughness;
-    vec2 padding;
+    float transmittance;
+    float IOR;
 } Material;
 
-Material* createMaterial(vec3 albedo, vec2 roughness, float metallic, vec3 emissionColour, float emissionStrength, Material* material, DynamicArray* materialInstanceTracker);
+Material* createMaterial(vec3 albedo, vec2 roughness, float metallic, float transmittance, float IOR, vec3 emissionColour, float emissionStrength, Material* material, DynamicArray* materialInstanceTracker);
 void destroyMaterial(Material* this);
 void disposeMaterialBlueprints(DynamicArray* materialInstanceTracker);
 

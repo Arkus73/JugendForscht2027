@@ -719,8 +719,9 @@ CMakeFiles/Raytracer.dir/src/sphere.c.obj: C:/Users/shein/Documents/Coding/LowLe
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec3.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec4-ext.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec4.h \
+  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/KHR/khrplatform.h \
+  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/glad/glad.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glfw/include/GLFW/glfw3.h \
-  C:/msys64/ucrt64/include/GL/gl.h \
   C:/msys64/ucrt64/include/_mingw.h \
   C:/msys64/ucrt64/include/_mingw_mac.h \
   C:/msys64/ucrt64/include/_mingw_off_t.h \

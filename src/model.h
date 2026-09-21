@@ -31,7 +31,7 @@ void deinitModelInstanceTracker(ModelInstanceTracker* this);
 Model* createModel(ModelInstanceTracker* modelInstanceTracker, vec4* vertices, int vertexCount, Material* material, vec3 position, vec3 scale, bool dynamic);
 void destroyModel(Model* this);
 // Erst nach der Erstellung und vor dem Upload aller Models aufrufen
-unsigned int prepareSSBO(ModelInstanceTracker* modelInstanceTracker);
+unsigned int prepareModelSSBO(ModelInstanceTracker* modelInstanceTracker);
 void uploadModel(Model* this, ModelInstanceTracker* modelInstanceTracker, unsigned int modelSSBO);
 void uploadAllModels(ModelInstanceTracker* modelInstanceTracker, unsigned int modelSSBO);
 // CPU Daten der statischen, nicht änderbaren Modelle werden gelöscht, um unnötig allokierten Speicher freizugeben
