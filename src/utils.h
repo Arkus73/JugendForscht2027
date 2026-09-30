@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #define ASPECT_RATIO 16.0f / 9.0f
+#define SPECTRAL_RESOLUTION 81
 
 #define __cleanup(func) __attribute__((cleanup(func)))  // __cleanup bevor einer Pointer-Deklaration sorgt dafür, dass auf einen Pointer zu diesem Pointer die angegebene Funktion wird 
 #define __constructor __attribute__((constructor))  // Markiert Funktionen, die automatisch vor main() ausgeführt werden

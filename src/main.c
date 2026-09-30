@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
     setFloat(raytracer, "viewplane.deltaV", deltaV);
 
     // Nötige Kameradaten werden an den Shader geschickt
-    vec3 camCenter = {0.0f, 0.0f, 14.9f};
+    vec3 camCenter = {3.0f, 0.0f, 14.9f};
     setVec3(raytracer, "cam.center", camCenter);
     mat4 camTransform;
     glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
     Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
     Material* bleenMaterial = createMaterial((vec3) {0.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
 
-    Sphere* sphere = createSphere((vec3) {-2.0f, 0.0f, 10.0f}, 1.0f, refractiveMaterial, false, sphereInstanceTracker);
+    Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 10.0f}, 1.0f, refractiveMaterial, false, sphereInstanceTracker);
 
     unsigned int sphereSSBO = prepareSphereSSBO(sphereInstanceTracker);
     uploadAllSpheres(sphereInstanceTracker, sphereSSBO);
@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
     Model* leftWall = createModel(modelInstanceTracker, vertices, 36, redMaterial, (vec3) {-10.5f, 0.0f, 0.0f}, (vec3) {1.0f, 20.0f, 30.0f}, false);
     Model* rightWall = createModel(modelInstanceTracker, vertices, 36, blueMaterial, (vec3) {10.5f, 0.0f, 0.0f}, (vec3) {1.0f, 20.0f, 30.0f}, false);
 
-    Model* refractiveCube = createModel(modelInstanceTracker, vertices, 36, refractiveMaterial, (vec3) {2.0f, 0.0f, 10.0f}, (vec3) {1.0f, 1.0f, 1.0f}, false);
+    Model* refractiveCube = createModel(modelInstanceTracker, vertices, 36, bleenMaterial, (vec3) {0.0f, 0.0f, 5.0f}, (vec3) {1.0f, 1.0f, 1.0f}, false);
 
     unsigned int modelSSBO = prepareModelSSBO(modelInstanceTracker);
 
@@ -173,8 +173,8 @@ int main(int argc, char** argv) {
     disposeMaterialBlueprints(materialInstanceTracker);
 
     // Sonstige Uniforms werden festgelegt
-    setInt(raytracer, "maxBounceCount", 10);
-    setInt(raytracer, "samplesPerPixel", 16);
+    setInt(raytracer, "maxBounceCount", 6);
+    setInt(raytracer, "samplesPerPixel", 32);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
 
     float lastFrame = glfwGetTime();
     int frameCount = 0;
-    int videoFrameCount = 1;
+    int videoFrameCount = 0;
     
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -203,7 +203,7 @@ int main(int argc, char** argv) {
         render(raytracer, texture, frameCount, true);
         frameCount++;
         //printf("%d\n", frameCount);
-        renderVideo(raytracer, texture, &frameCount, 128, &videoFrameCount, 1, 2.0f, window);
+        //renderVideo(raytracer, texture, &frameCount, 512, &videoFrameCount, 1, 1.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
         useShader(quadShader);
@@ -275,7 +275,7 @@ void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int fr
         float delta = 1.0 / (int) FPS;
         float time = *videoFrameCount * delta;
         // Hier Bewegung einfügen
-        vec3 camCenter = {-3.0f + time * 3.0f, 0.0f, 14.9f};
+        vec3 camCenter = {-3.0f + time * 2.0f, 0.0f, 14.9f};
         setVec3(raytracer, "cam.center", camCenter);
         mat4 camTransform;
         glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
