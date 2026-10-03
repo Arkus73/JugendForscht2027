@@ -282,30 +282,6 @@ src/AABB.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.s
 .PHONY : src/AABB.c.s
 
-src/camera.obj: src/camera.c.obj
-.PHONY : src/camera.obj
-
-# target to build an object file
-src/camera.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/camera.c.obj
-.PHONY : src/camera.c.obj
-
-src/camera.i: src/camera.c.i
-.PHONY : src/camera.i
-
-# target to preprocess a source file
-src/camera.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/camera.c.i
-.PHONY : src/camera.c.i
-
-src/camera.s: src/camera.c.s
-.PHONY : src/camera.s
-
-# target to generate assembly for a file
-src/camera.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/camera.c.s
-.PHONY : src/camera.c.s
-
 src/dynamicArray.obj: src/dynamicArray.c.obj
 .PHONY : src/dynamicArray.obj
 
@@ -401,6 +377,30 @@ src/model.s: src/model.c.s
 src/model.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.s
 .PHONY : src/model.c.s
+
+src/rgb2spec.obj: src/rgb2spec.c.obj
+.PHONY : src/rgb2spec.obj
+
+# target to build an object file
+src/rgb2spec.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/rgb2spec.c.obj
+.PHONY : src/rgb2spec.c.obj
+
+src/rgb2spec.i: src/rgb2spec.c.i
+.PHONY : src/rgb2spec.i
+
+# target to preprocess a source file
+src/rgb2spec.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/rgb2spec.c.i
+.PHONY : src/rgb2spec.c.i
+
+src/rgb2spec.s: src/rgb2spec.c.s
+.PHONY : src/rgb2spec.s
+
+# target to generate assembly for a file
+src/rgb2spec.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/rgb2spec.c.s
+.PHONY : src/rgb2spec.c.s
 
 src/shader.obj: src/shader.c.obj
 .PHONY : src/shader.obj
@@ -545,9 +545,6 @@ help:
 	@echo ... src/AABB.obj
 	@echo ... src/AABB.i
 	@echo ... src/AABB.s
-	@echo ... src/camera.obj
-	@echo ... src/camera.i
-	@echo ... src/camera.s
 	@echo ... src/dynamicArray.obj
 	@echo ... src/dynamicArray.i
 	@echo ... src/dynamicArray.s
@@ -560,6 +557,9 @@ help:
 	@echo ... src/model.obj
 	@echo ... src/model.i
 	@echo ... src/model.s
+	@echo ... src/rgb2spec.obj
+	@echo ... src/rgb2spec.i
+	@echo ... src/rgb2spec.s
 	@echo ... src/shader.obj
 	@echo ... src/shader.i
 	@echo ... src/shader.s

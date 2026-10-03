@@ -101,109 +101,6 @@ CMakeFiles/Raytracer.dir/src/AABB.c.obj: C:/Users/shein/Documents/Coding/LowLeve
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/AABB.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.h
 
-CMakeFiles/Raytracer.dir/src/camera.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.c \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/aabb2d.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/affine-mat.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/affine-post.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/affine-pre.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/affine.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/affine2d-post.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/affine2d.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/bezier.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/box.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/cam.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/cglm.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/clipspace/ortho_rh_no.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/clipspace/persp.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/clipspace/persp_rh_no.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/clipspace/project_no.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/clipspace/view_rh.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/clipspace/view_rh_no.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/color.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/common.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/curve.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/ease.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/euler.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/frustum.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/handed/euler_to_quat_rh.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/io.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/ivec2.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/ivec3.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/ivec4.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat2.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat2x3.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat2x4.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat3.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat3x2.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat3x4.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat4.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat4x2.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/mat4x3.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/noise.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/plane.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/project.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/quat.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/ray.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/intrin.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/sse2/affine.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/sse2/mat2.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/sse2/mat3.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/sse2/mat4.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/sse2/quat.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/x86.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/sphere.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/types.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/util.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec2-ext.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec2.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec3-ext.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec3.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec4-ext.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec4.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/GLAD/glad.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/KHR/khrplatform.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glfw/include/GLFW/glfw3.h \
-  C:/msys64/ucrt64/include/_mingw.h \
-  C:/msys64/ucrt64/include/_mingw_mac.h \
-  C:/msys64/ucrt64/include/_mingw_off_t.h \
-  C:/msys64/ucrt64/include/_mingw_secapi.h \
-  C:/msys64/ucrt64/include/assert.h \
-  C:/msys64/ucrt64/include/corecrt.h \
-  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
-  C:/msys64/ucrt64/include/corecrt_wstdlib.h \
-  C:/msys64/ucrt64/include/crtdefs.h \
-  C:/msys64/ucrt64/include/errno.h \
-  C:/msys64/ucrt64/include/float.h \
-  C:/msys64/ucrt64/include/limits.h \
-  C:/msys64/ucrt64/include/malloc.h \
-  C:/msys64/ucrt64/include/math.h \
-  C:/msys64/ucrt64/include/sdks/_mingw_ddk.h \
-  C:/msys64/ucrt64/include/sec_api/stdio_s.h \
-  C:/msys64/ucrt64/include/sec_api/stdlib_s.h \
-  C:/msys64/ucrt64/include/sec_api/string_s.h \
-  C:/msys64/ucrt64/include/stddef.h \
-  C:/msys64/ucrt64/include/stdint.h \
-  C:/msys64/ucrt64/include/stdio.h \
-  C:/msys64/ucrt64/include/stdlib.h \
-  C:/msys64/ucrt64/include/string.h \
-  C:/msys64/ucrt64/include/swprintf.inl \
-  C:/msys64/ucrt64/include/vadefs.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/emmintrin.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mmintrin.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitintrin.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pmmintrin.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdalign.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdbool.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
-  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xmmintrin.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.h \
-  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.h
-
 CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/dynamicArray.c \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glfw/include/GLFW/glfw3.h \
   C:/msys64/ucrt64/include/GL/gl.h \
@@ -328,23 +225,119 @@ CMakeFiles/Raytracer.dir/src/main.c.obj: C:/Users/shein/Documents/Coding/LowLeve
   C:/msys64/ucrt64/include/sys/timeb.h \
   C:/msys64/ucrt64/include/time.h \
   C:/msys64/ucrt64/include/vadefs.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/adxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxbf16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxcomplexintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxfp16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxint8intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxtileintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx2intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124fmapsintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124vnniwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgvlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512cdintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512dqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512erintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmavlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512pfintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmi2intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmi2vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmiintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmivlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlbwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vldqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vnniintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vnnivlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectvlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqvlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxifmaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxneconvertintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint8intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmi2intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmiintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cetintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cldemoteintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clflushoptintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clwbintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clzerointrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cmpccxaddintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/emmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/enqcmdintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/f16cintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fmaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fxsrintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/gfniintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/hresetintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/ia32intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/immintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/keylockerintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/lwpintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/lzcntintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/movdirintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pconfigintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pkuintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/popcntintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchiintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/raointintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/rdseedintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/rtmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/serializeintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sgxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sha512intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/shaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sm3intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sm4intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/smmintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdalign.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdbool.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tbmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tsxldtrkintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/uintrintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/usermsrintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/vaesintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/vpclmulqdqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/waitpkgintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/wbnoinvdintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/wmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86gprintrin.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavecintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsaveintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsaveoptintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavesintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xtestintrin.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/AABB.h \
+  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/colours.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/dynamicArray.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/material.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/model.h \
+  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/rgb2spec.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/sphere.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/stb_image_write.h \
@@ -558,6 +551,137 @@ CMakeFiles/Raytracer.dir/src/model.c.obj: C:/Users/shein/Documents/Coding/LowLev
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/material.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/model.h \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.h
+
+CMakeFiles/Raytracer.dir/src/rgb2spec.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/rgb2spec.c \
+  C:/msys64/ucrt64/include/_mingw.h \
+  C:/msys64/ucrt64/include/_mingw_mac.h \
+  C:/msys64/ucrt64/include/_mingw_off_t.h \
+  C:/msys64/ucrt64/include/_mingw_secapi.h \
+  C:/msys64/ucrt64/include/assert.h \
+  C:/msys64/ucrt64/include/corecrt.h \
+  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
+  C:/msys64/ucrt64/include/corecrt_wstdlib.h \
+  C:/msys64/ucrt64/include/crtdefs.h \
+  C:/msys64/ucrt64/include/errno.h \
+  C:/msys64/ucrt64/include/limits.h \
+  C:/msys64/ucrt64/include/malloc.h \
+  C:/msys64/ucrt64/include/math.h \
+  C:/msys64/ucrt64/include/sdks/_mingw_ddk.h \
+  C:/msys64/ucrt64/include/sec_api/stdio_s.h \
+  C:/msys64/ucrt64/include/sec_api/stdlib_s.h \
+  C:/msys64/ucrt64/include/sec_api/string_s.h \
+  C:/msys64/ucrt64/include/stddef.h \
+  C:/msys64/ucrt64/include/stdint.h \
+  C:/msys64/ucrt64/include/stdio.h \
+  C:/msys64/ucrt64/include/stdlib.h \
+  C:/msys64/ucrt64/include/string.h \
+  C:/msys64/ucrt64/include/swprintf.inl \
+  C:/msys64/ucrt64/include/vadefs.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/adxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxbf16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxcomplexintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxfp16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxint8intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxtileintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx2intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124fmapsintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124vnniwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgvlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512cdintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512dqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512erintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmavlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512pfintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmi2intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmi2vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmiintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmivlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlbwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vldqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vnniintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vnnivlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectvlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqvlintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxifmaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxneconvertintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint16intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint8intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmi2intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmiintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cetintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cldemoteintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clflushoptintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clwbintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clzerointrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cmpccxaddintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/emmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/enqcmdintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/f16cintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fmaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fxsrintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/gfniintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/hresetintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/ia32intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/immintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/keylockerintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/lwpintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/lzcntintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/movdirintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pconfigintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pkuintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/popcntintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchiintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchwintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/raointintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/rdseedintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/rtmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/serializeintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sgxintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sha512intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/shaintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sm3intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sm4intrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/smmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tbmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tsxldtrkintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/uintrintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/usermsrintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/vaesintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/vpclmulqdqintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/waitpkgintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/wbnoinvdintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/wmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86gprintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xmmintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavecintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsaveintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsaveoptintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavesintrin.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xtestintrin.h \
+  C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/rgb2spec.h
 
 CMakeFiles/Raytracer.dir/src/shader.c.obj: C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.c \
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/aabb2d.h \
@@ -876,6 +1000,8 @@ CMakeFiles/Raytracer.dir/src/utils.c.obj: C:/Users/shein/Documents/Coding/LowLev
   C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.h
 
 
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqintrin.h:
+
 C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitintrin.h:
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/sse2/affine.h:
@@ -927,6 +1053,8 @@ C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/exter
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/cglm.h:
 
 C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxint8intrin.h:
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/vec2.h:
 
@@ -1008,6 +1136,10 @@ C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/d
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/ray.h:
 
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsaveintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clzerointrin.h:
+
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/cglm/include/cglm/simd/x86.h:
 
 C:/msys64/ucrt64/include/malloc.h:
@@ -1036,11 +1168,15 @@ C:/msys64/ucrt64/include/_mingw_secapi.h:
 
 C:/msys64/ucrt64/include/assert.h:
 
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/wmmintrin.h:
+
 C:/msys64/ucrt64/include/corecrt_stdio_config.h:
 
 C:/msys64/ucrt64/include/stdlib.h:
 
 C:/msys64/ucrt64/include/corecrt_wstdlib.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/keylockerintrin.h:
 
 C:/msys64/ucrt64/include/crtdefs.h:
 
@@ -1060,9 +1196,9 @@ C:/msys64/ucrt64/include/sec_api/stdlib_s.h:
 
 C:/msys64/ucrt64/include/stddef.h:
 
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.h:
-
 C:/msys64/ucrt64/include/stdint.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/immintrin.h:
 
 C:/msys64/ucrt64/include/stdio.h:
 
@@ -1075,6 +1211,10 @@ C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h:
 C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h:
 
 C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mmintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/popcntintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgvlintrin.h:
 
 C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pmmintrin.h:
 
@@ -1090,17 +1230,13 @@ C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xmmintrin.h:
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/AABB.h:
 
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/camera.c:
-
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/GLAD/glad.h:
-
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/KHR/khrplatform.h:
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/dynamicArray.c:
 
 C:/msys64/ucrt64/include/string.h:
 
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/dynamicArray.c:
-
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/main.c:
+
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/external/glad/include/KHR/khrplatform.h:
 
 C:/msys64/ucrt64/include/_timeval.h:
 
@@ -1112,9 +1248,189 @@ C:/msys64/ucrt64/include/sys/timeb.h:
 
 C:/msys64/ucrt64/include/time.h:
 
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/adxintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxbf16intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxcomplexintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxfp16intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxtileintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmi2intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx2intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchiintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124fmapsintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124vnniwintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16vlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bwintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512cdintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512dqintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512erintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16vlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmaintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectvlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmavlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512pfintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmi2vlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmiintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vbmivlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlbwintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vldqintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vnniintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vnnivlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sm4intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqvlintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxifmaintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxneconvertintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint16intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint8intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmi2intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmiintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cetintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cldemoteintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clflushoptintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clwbintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cmpccxaddintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/enqcmdintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/f16cintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fmaintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fxsrintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/gfniintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/hresetintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/ia32intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/lwpintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/lzcntintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/movdirintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mwaitxintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pconfigintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/pkuintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchwintrin.h:
+
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.c:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/raointintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/rdseedintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/rtmintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/serializeintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sgxintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sha512intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/shaintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/sm3intrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/smmintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tbmintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tmmintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/tsxldtrkintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/uintrintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/usermsrintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/vaesintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/vpclmulqdqintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/waitpkgintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/wbnoinvdintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86gprintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavecintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsaveoptintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavesintrin.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xtestintrin.h:
+
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/colours.h:
+
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/material.h:
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/model.h:
+
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.c:
+
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/rgb2spec.h:
+
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/rgb2spec.c:
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.h:
 
@@ -1126,12 +1442,8 @@ C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/m
 
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/model.c:
 
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/shader.c:
-
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/stb_image.c:
 
 C:/msys64/ucrt64/include/_mingw_stdarg.h:
 
 C:/msys64/ucrt64/include/stdarg.h:
-
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/src/utils.c:

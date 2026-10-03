@@ -4,8 +4,11 @@
 #include <GLFW/glfw3.h>
 #include <stdbool.h>
 
-#define ASPECT_RATIO 16.0f / 9.0f
-#define SPECTRAL_RESOLUTION 81
+#define ASPECT_RATIO (16.0f / 9.0f)
+#define SPECTRAL_RESOLUTION (3)
+#define MIN_WAVELENGTH (400)
+#define MAX_WAVELENGTH (800)
+#define WAVELENGTH_STEP ((float)(MAX_WAVELENGTH - MIN_WAVELENGTH) / (float)(SPECTRAL_RESOLUTION - 1.0f))
 
 #define __cleanup(func) __attribute__((cleanup(func)))  // __cleanup bevor einer Pointer-Deklaration sorgt dafür, dass auf einen Pointer zu diesem Pointer die angegebene Funktion wird 
 #define __constructor __attribute__((constructor))  // Markiert Funktionen, die automatisch vor main() ausgeführt werden

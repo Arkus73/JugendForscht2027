@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Raytracer.dir/src/AABB.c.obj"
   "CMakeFiles/Raytracer.dir/src/AABB.c.obj.d"
-  "CMakeFiles/Raytracer.dir/src/camera.c.obj"
-  "CMakeFiles/Raytracer.dir/src/camera.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj"
   "CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/main.c.obj"
@@ -11,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Raytracer.dir/src/material.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/model.c.obj"
   "CMakeFiles/Raytracer.dir/src/model.c.obj.d"
+  "CMakeFiles/Raytracer.dir/src/rgb2spec.c.obj"
+  "CMakeFiles/Raytracer.dir/src/rgb2spec.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/shader.c.obj"
   "CMakeFiles/Raytracer.dir/src/shader.c.obj.d"
   "CMakeFiles/Raytracer.dir/src/sphere.c.obj"

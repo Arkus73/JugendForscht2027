@@ -16,13 +16,12 @@ struct ViewPlane {
 };
 
 struct Material {
-    vec3 albedo;
+    vec3 albedoSpectrumCoeffs;
     float metallic;
-    vec3 emissionColour;
-    float emissionStrength;
     vec2 roughness;
     float transmittance;
     float IOR;
+    float emissionSpectrum[3];
 };
 
 struct Sphere {
@@ -76,7 +75,6 @@ layout (std430, binding = 2) readonly buffer Spheres {
 #define MODEL_COUNT 8
 layout (std430, binding = 1) readonly buffer Models {
     ivec4 meshOffsetsAndVertexCounts[MODEL_COUNT];
-    mat4 modelMatrices[MODEL_COUNT];
     mat4 invModelMatrices[MODEL_COUNT];
     AABB modelAABBs[MODEL_COUNT];
     Material modelMaterials[MODEL_COUNT];
@@ -115,8 +113,8 @@ Diese Samples werden schlussendlich gemäß der Monte Carlo Integration aufsummi
 
 void main() {
     ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
-    // Ein pixel- und frameabhängiger Seed wird aus dem gehashten Texel-Koordinaten mit dem Frame-Spezifischen Seed gemischt
-    uint state  = (texelCoord.x * 73856093) ^ (texelCoord.y * 19349663) ^ (frameSeed * 83492791);
+    // Ein pixel- und frameabhängiger Seed wird aus den Texel-Koordinaten mit dem Frame-Spezifischen Seed gemischt
+    uint state = (texelCoord.x * gl_NumWorkGroups.x + texelCoord.y) * frameSeed;
     
     Ray ray = {cam.center, vec3(0.0), 1.0, 0.0};
     
@@ -275,7 +273,7 @@ HitInfo calculateClosestHit(Ray ray) {
 
     HitInfo closestHit;
     closestHit.dist = 100000.0;
-    closestHit.material.albedo = vec3(0.0, 0.0, 0.0);
+    closestHit.material.albedoSpectrumCoeffs = vec3(0.0, 0.0, 0.0);
 
     for(int i = 0; i < SPHERE_COUNT; i++) {
         Sphere sphere = {sphereSpatialData[i].xyz, sphereSpatialData[i].w, sphereMaterials[i]};
@@ -296,7 +294,6 @@ HitInfo calculateClosestHit(Ray ray) {
         }
 
         Material material = modelMaterials[i];
-        mat4 modelMatrix = modelMatrices[i];
         int meshOffset = meshOffsetsAndVertexCounts[i].x;
         int meshVertexCount = meshOffsetsAndVertexCounts[i].y;
 
@@ -404,15 +401,6 @@ float sinPhi(vec3 w) {
     return (sinTheta == 0.0) ? 0.0 : clamp(w.y / sinTheta, -1.0, 1.0);
 }
 
-// Die *N*ormal-*D*istribution-*F*unction beschreibt die relative Anzahl der Mikrofazetten, die in Richtung der gesampleten Normale wm zeigen.
-float GGX_NDF(vec3 wm, vec2 alpha) {
-    float tan2Theta = tan2Theta(wm);
-    if(isinf(tan2Theta)) return 0.0;
-    float cos4Theta = SQR(cos2Theta(wm));
-    float e = tan2Theta * (SQR(cosPhi(wm) / alpha.x) + SQR(sinPhi(wm) / alpha.y));
-    return 1.0 / (PI * alpha.x * alpha.y * cos4Theta * SQR(1 + e));
-}
-
 // Hilffunktion lambda für die Maskierungsfunktion G1 und die zusammengesetzte Maskierungs-/Schattierungsfunktion G
 float lambda(vec3 w, vec2 alpha) {
     float tan2Theta = tan2Theta(w);
@@ -435,12 +423,17 @@ void buildOrthonormalBasis(vec3 n, out vec3 t, out vec3 b) {
     b = cross(t, n);
 }
 
-float GGX_VNDF(vec3 wo, vec3 wm, vec2 alpha) {
-    return (G1(wo, alpha) / abs(cosTheta(wo))) * GGX_NDF(wm, alpha) * max(dot(wo, wm), 0.0);
-}
-
 bool sameHemisphere(vec3 w1, vec3 w2) {
     return w1.z * w2.z > 0.0;
+}
+
+// Quetscht das Albedo Spektrum in den Bereich [0;1], um die Energieerhaltung zu gewährleisten
+float S(float x) {
+    return 0.5 + (x / (2 * sqrt(1 + SQR(x))));
+}
+
+float evalAlbedoSpectrum(vec3 albedoSpectrumCoeffs, float lambda) {
+    return S(albedoSpectrumCoeffs.x * SQR(lambda) + albedoSpectrumCoeffs.y * lambda + albedoSpectrumCoeffs.z);
 }
 
 vec3 traceRay(Ray ray, inout uint state) {
@@ -455,24 +448,25 @@ vec3 traceRay(Ray ray, inout uint state) {
         if(hitInfo.didHit) {
             
             Material material = hitInfo.material;
-
-            vec3 emittedLight = material.emissionColour * material.emissionStrength; // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir) des getroffenen Punktes
-            incomingLight += throughput * emittedLight;
             
-            if(material.emissionStrength != 0.0) {
+            // Ist das Material eine Lichtquelle?
+            if(material.emissionSpectrum[0] >= -EPSILON) {
+                vec3 emittedLight = vec3(material.emissionSpectrum[0], material.emissionSpectrum[1], material.emissionSpectrum[2]); // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir) des getroffenen Punktes
+                incomingLight += throughput * emittedLight;
                 break;
-            }
-
-            // Makrooberflächennormale
-            vec3 geometricNormal = hitInfo.normal;
-            bool frontface = dot(geometricNormal, -ray.dir) > 0.0;
-            vec3 n = geometricNormal;
-            if(!frontface) {
-                n = -n;
             }
 
             // Beobachtungsrichtung
             vec3 woGlobal = -ray.dir;
+
+            // Makrooberflächennormale
+            vec3 geometricNormal = hitInfo.normal;
+            bool frontface = dot(geometricNormal, woGlobal) > 0.0;
+            // ausgerichtete Normale
+            vec3 n = geometricNormal;
+            if(!frontface) {
+                n = -n;
+            }
 
             // wo wird für die Berechnungen in den Normalenraum transformiert
             vec3 t, b;
@@ -483,16 +477,17 @@ vec3 traceRay(Ray ray, inout uint state) {
 
             // Die wahrgenommene Rauheit wird in die tatsächliche Rauheit alpha umgewandelt
             vec2 alpha = max(SQR(material.roughness), vec2(EPSILON));
-            // Es wird eine zufällige Mikrofazettennormale generiert und der Strahl an ihr reflektiert
+            // Es wird eine zufällige Mikrofazettennormale generiert
             vec3 wm = sampleWm(wo, alpha, state);
 
-            // BxDF-, PDF- und Teil-Formeln aus https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory; Siehe Notizen für gekürzte Throughput-Weight Herleitungen
+            vec3 albedo = vec3(evalAlbedoSpectrum(material.albedoSpectrumCoeffs, 700.0), evalAlbedoSpectrum(material.albedoSpectrumCoeffs, 540.0), evalAlbedoSpectrum(material.albedoSpectrumCoeffs, 460.0));
+            // BxDF und PDF aus https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory; Siehe Notizen für gekürzte Throughput-Weight Herleitungen
             if(material.transmittance < EPSILON) {
                 // BRDF
 
-                // Basisspekularreflexionschance bei Einfallswinkel 90°
-                vec3 F0 = mix(vec3(0.04), material.albedo, material.metallic);
-                // Fresnel-Wert, also realistische Spekularreflexionschance abhängig vom Einfallswinkel, Schlick-Approximation
+                // Basisspekularreflexionsanteil bei Einfallswinkel 90°
+                vec3 F0 = mix(vec3(0.04), albedo, material.metallic);
+                // Fresnel-Wert, also realistischer Spekularreflexionsanteil abhängig vom Einfallswinkel, Schlick-Approximation
                 vec3 F = F0 + (vec3(1.0) - F0) * pow(1.0 - min(dot(wm, wo), 1.0 - EPSILON), 5.0);
 
                 float pSpecular = dot(F, vec3(0.2126, 0.7152, 0.0722));
@@ -500,7 +495,7 @@ vec3 traceRay(Ray ray, inout uint state) {
                 if(pSpecular < randf(state)) {
                     // Diffuse-Anteil nach Lambert
                     ray.dir = normalize(geometricNormal + randomOnUnitSphere(state));
-                    throughput *= material.albedo * (1.0 - material.metallic) / ((1.0 - pSpecular));
+                    throughput *= albedo * (1.0 - F) / ((1.0 - pSpecular));
                     
                 } else {
                     // Specular-Anteil nach Torrance-Sparrow
@@ -546,6 +541,7 @@ vec3 traceRay(Ray ray, inout uint state) {
                 
                 vec3 wiGlobal = normalize(localToGlobal * wi);
                 ray.dir = wiGlobal;
+                // Je nachdem, ob der Strahl innerhalb oder außerhalb eines Objekts weiterfliegt, wird der Startpunkt zur Verhinderung von Fehlern durch Fließkommaungenauigkeiten modifiziert
                 ray.origin = (dot(wiGlobal, geometricNormal) < 0.0) ? hitInfo.hitPoint - geometricNormal * EPSILON : hitInfo.hitPoint + geometricNormal * EPSILON;
             }
 

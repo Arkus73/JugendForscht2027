@@ -17,7 +17,7 @@ Sphere* createSphere(vec3 center, float radius, Material* material, bool dynamic
     glm_vec3_copy(center, this->center);
     this->radius = radius;
     this->dynamic = dynamic;
-    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC2_ZERO, 0.0f, 0.0f, 0.0f, GLM_VEC3_ZERO, 0.0f, material, NULL);
+    this->material = createMaterial(GLM_VEC3_ZERO, GLM_VEC2_ZERO, 0.0f, 0.0f, 0.0f, NULL, material, NULL);
 
     addToDynamicArray(sphereInstanceTracker, &this);
 

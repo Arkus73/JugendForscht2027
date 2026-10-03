@@ -26,10 +26,10 @@ add_executable(Raytracer
     src/main.c
     src/model.c
     src/utils.c
+    src/rgb2spec.c
     src/shader.c
     src/stb_image.c
     src/stb_image_write.c
-    src/camera.c
     src/sphere.c
     src/material.c
 )

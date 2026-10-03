@@ -21,7 +21,7 @@
 - [ X ] Lichtbrechende, transmissive Materialien durch eine BSDF simulieren (ID: 13)
 
 ### Erweiterung zum spektralen Path Tracing
-- [  ] Ersatz der emissionColour des Material-Structs durch emissionSpectrum, sowie Einlesemethode für diese Spektren (ID: 16)
+- [ X ] Ersatz der emissionColour des Material-Structs durch emissionSpectrum (ID: 16)
 - [  ] Implementierung eines Spectral Upsampling Verfahrens zur Rekonstruktion möglicher Albedospektren aus den Albedotripeln (ID: 17)
 - [  ] Vereinfachtes Wavelength Sampling und erste spektrale Renders (ID: 18)
 - [  ] Verbessertes Wavelength Sampling (Hero Wavelength Sampling, Importance Sampling) (ID: 19)
@@ -69,4 +69,5 @@
 - Eigenartig dunkle Akzente bei Glaswürfel. Vielleicht Strahl durch TIRs darin gefangen? -> Wahrscheinlicher Grund, kein Bug. Phänomen verschwindet bei erhöhter maxBounceCount
 - Backface Culling kompatibel mit polygonisch aufgebauten, refraktiven Materialien gemacht
 
-### [2026-09-21 bis] - Spektrales Path Tracing - [TODO ID ]
+### [2026-09-21 bis] - Spektrales Path Tracing - [TODO ID 16]
+- Erweiterung des Materialmodells zur Annahme von Emissionsspektren statt Emissionsfarben und Löschen der emissionStrength

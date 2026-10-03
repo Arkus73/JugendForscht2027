@@ -1,8 +1,10 @@
 #include <cglm/cglm.h>
+#include "colours.h"
 #include "dynamicArray.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "model.h"
+#include "rgb2spec.h"
 #include "shader.h"
 #include "sphere.h"
 #include "stb_image_write.h"
@@ -85,13 +87,32 @@ int main(int argc, char** argv) {
     DynamicArray* sphereInstanceTracker = createDynamicArray(sizeof(Sphere*), 1);
     ModelInstanceTracker* modelInstanceTracker = initModelInstanceTracker();
 
-    Material* lightMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {1.0f, 1.0f, 1.0f}, 17.5f, NULL, materialInstanceTracker);
-    Material* whiteMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* refractiveMaterial = createMaterial((vec3) {1.0f, 1.0f, 1.0f}, (vec2) {0.0f, 0.0f}, 0.0f, 1.0f, 2.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* redMaterial = createMaterial((vec3) {1.0f, 0.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* greenMaterial = createMaterial((vec3) {0.0f, 1.0f, 0.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* blueMaterial = createMaterial((vec3) {0.0f, 0.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
-    Material* bleenMaterial = createMaterial((vec3) {0.0f, 1.0f, 1.0f}, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, (vec3) {0.0f, 0.0f, 0.0f}, 0.0f, NULL, materialInstanceTracker);
+    float darkSpectrum[SPECTRAL_RESOLUTION], brightSpectrum[SPECTRAL_RESOLUTION];
+    for(int i = 0; i < SPECTRAL_RESOLUTION; i++) {
+        darkSpectrum[i] = 0.0f;
+        brightSpectrum[i] = 17.5f;
+    }
+    darkSpectrum[0] = -1.0f; // Kennzeichen eines nicht leutenden Materials
+
+    // LUT zur Überführung der RGB-Farben in Spektrumskoeffizienten wird geladen
+    RGB2Spec* LUT = rgb2spec_load("..\\input\\srgb.coeff");
+
+    vec3 redCoeff, greenCoeff, blueCoeff, bleenCoeff, whiteCoeff;
+    rgb2spec_fetch(LUT, RED, redCoeff);
+    rgb2spec_fetch(LUT, GREEN, greenCoeff);
+    rgb2spec_fetch(LUT, BLUE, blueCoeff);
+    rgb2spec_fetch(LUT, BLEEN, bleenCoeff);
+    rgb2spec_fetch(LUT, WHITE, whiteCoeff);
+
+    Material* lightMaterial = createMaterial(whiteCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, brightSpectrum, NULL, materialInstanceTracker);
+    Material* whiteMaterial = createMaterial(whiteCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, darkSpectrum, NULL, materialInstanceTracker);
+    Material* refractiveMaterial = createMaterial(whiteCoeff, (vec2) {0.0f, 0.0f}, 0.0f, 1.0f, 2.0f, darkSpectrum, NULL, materialInstanceTracker);
+    Material* redMaterial = createMaterial(redCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, darkSpectrum, NULL, materialInstanceTracker);
+    Material* greenMaterial = createMaterial(greenCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, darkSpectrum, NULL, materialInstanceTracker);
+    Material* blueMaterial = createMaterial(blueCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, darkSpectrum, NULL, materialInstanceTracker);
+    Material* bleenMaterial = createMaterial(bleenCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, darkSpectrum, NULL, materialInstanceTracker);
+
+    rgb2spec_free(LUT);
 
     Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 10.0f}, 1.0f, refractiveMaterial, false, sphereInstanceTracker);
 
@@ -174,7 +195,7 @@ int main(int argc, char** argv) {
 
     // Sonstige Uniforms werden festgelegt
     setInt(raytracer, "maxBounceCount", 6);
-    setInt(raytracer, "samplesPerPixel", 32);
+    setInt(raytracer, "samplesPerPixel", 16);
 
     // Textur, die vom Raytracer bearbeitet und später dargestellt wird
     unsigned int texture;
@@ -275,17 +296,12 @@ void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int fr
         float delta = 1.0 / (int) FPS;
         float time = *videoFrameCount * delta;
         // Hier Bewegung einfügen
-        vec3 camCenter = {-3.0f + time * 2.0f, 0.0f, 14.9f};
-        setVec3(raytracer, "cam.center", camCenter);
-        mat4 camTransform;
-        glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
-        glm_mat4_inv(camTransform, camTransform);
-        setMatrix(raytracer, "cam.transform", camTransform);
+
         
         // Wurde das letzte Bild gerendert, wird das Programm geschlossen
         if(*videoFrameCount >= (int) (videoLength * FPS)) {
             glfwSetWindowShouldClose(window, true);
-            printf("Total rendering time: %.2f\n", glfwGetTime());
+            printf("Total rendering time: %.2f\n", (glfwGetTime()));
             printf("Average rendering time per frame: %.2f", glfwGetTime() / (float) *videoFrameCount);
         }
     }
