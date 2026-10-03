@@ -181,17 +181,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Raytracer
+# Target rules for targets named Pathtracer
 
 # Build rule for target.
-Raytracer: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Raytracer
-.PHONY : Raytracer
+Pathtracer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Pathtracer
+.PHONY : Pathtracer
 
 # fast build rule for target.
-Raytracer/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/build
-.PHONY : Raytracer/fast
+Pathtracer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/build
+.PHONY : Pathtracer/fast
 
 #=============================================================================
 # Target rules for targets named glad
@@ -263,7 +263,7 @@ src/AABB.obj: src/AABB.c.obj
 
 # target to build an object file
 src/AABB.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/AABB.c.obj
 .PHONY : src/AABB.c.obj
 
 src/AABB.i: src/AABB.c.i
@@ -271,7 +271,7 @@ src/AABB.i: src/AABB.c.i
 
 # target to preprocess a source file
 src/AABB.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/AABB.c.i
 .PHONY : src/AABB.c.i
 
 src/AABB.s: src/AABB.c.s
@@ -279,7 +279,7 @@ src/AABB.s: src/AABB.c.s
 
 # target to generate assembly for a file
 src/AABB.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/AABB.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/AABB.c.s
 .PHONY : src/AABB.c.s
 
 src/dynamicArray.obj: src/dynamicArray.c.obj
@@ -287,7 +287,7 @@ src/dynamicArray.obj: src/dynamicArray.c.obj
 
 # target to build an object file
 src/dynamicArray.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/dynamicArray.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/dynamicArray.c.obj
 .PHONY : src/dynamicArray.c.obj
 
 src/dynamicArray.i: src/dynamicArray.c.i
@@ -295,7 +295,7 @@ src/dynamicArray.i: src/dynamicArray.c.i
 
 # target to preprocess a source file
 src/dynamicArray.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/dynamicArray.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/dynamicArray.c.i
 .PHONY : src/dynamicArray.c.i
 
 src/dynamicArray.s: src/dynamicArray.c.s
@@ -303,7 +303,7 @@ src/dynamicArray.s: src/dynamicArray.c.s
 
 # target to generate assembly for a file
 src/dynamicArray.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/dynamicArray.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/dynamicArray.c.s
 .PHONY : src/dynamicArray.c.s
 
 src/main.obj: src/main.c.obj
@@ -311,7 +311,7 @@ src/main.obj: src/main.c.obj
 
 # target to build an object file
 src/main.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/main.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/main.c.obj
 .PHONY : src/main.c.obj
 
 src/main.i: src/main.c.i
@@ -319,7 +319,7 @@ src/main.i: src/main.c.i
 
 # target to preprocess a source file
 src/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/main.c.i
 .PHONY : src/main.c.i
 
 src/main.s: src/main.c.s
@@ -327,7 +327,7 @@ src/main.s: src/main.c.s
 
 # target to generate assembly for a file
 src/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/main.c.s
 .PHONY : src/main.c.s
 
 src/material.obj: src/material.c.obj
@@ -335,7 +335,7 @@ src/material.obj: src/material.c.obj
 
 # target to build an object file
 src/material.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/material.c.obj
 .PHONY : src/material.c.obj
 
 src/material.i: src/material.c.i
@@ -343,7 +343,7 @@ src/material.i: src/material.c.i
 
 # target to preprocess a source file
 src/material.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/material.c.i
 .PHONY : src/material.c.i
 
 src/material.s: src/material.c.s
@@ -351,7 +351,7 @@ src/material.s: src/material.c.s
 
 # target to generate assembly for a file
 src/material.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/material.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/material.c.s
 .PHONY : src/material.c.s
 
 src/model.obj: src/model.c.obj
@@ -359,7 +359,7 @@ src/model.obj: src/model.c.obj
 
 # target to build an object file
 src/model.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/model.c.obj
 .PHONY : src/model.c.obj
 
 src/model.i: src/model.c.i
@@ -367,7 +367,7 @@ src/model.i: src/model.c.i
 
 # target to preprocess a source file
 src/model.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/model.c.i
 .PHONY : src/model.c.i
 
 src/model.s: src/model.c.s
@@ -375,7 +375,7 @@ src/model.s: src/model.c.s
 
 # target to generate assembly for a file
 src/model.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/model.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/model.c.s
 .PHONY : src/model.c.s
 
 src/rgb2spec.obj: src/rgb2spec.c.obj
@@ -383,7 +383,7 @@ src/rgb2spec.obj: src/rgb2spec.c.obj
 
 # target to build an object file
 src/rgb2spec.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/rgb2spec.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/rgb2spec.c.obj
 .PHONY : src/rgb2spec.c.obj
 
 src/rgb2spec.i: src/rgb2spec.c.i
@@ -391,7 +391,7 @@ src/rgb2spec.i: src/rgb2spec.c.i
 
 # target to preprocess a source file
 src/rgb2spec.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/rgb2spec.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/rgb2spec.c.i
 .PHONY : src/rgb2spec.c.i
 
 src/rgb2spec.s: src/rgb2spec.c.s
@@ -399,7 +399,7 @@ src/rgb2spec.s: src/rgb2spec.c.s
 
 # target to generate assembly for a file
 src/rgb2spec.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/rgb2spec.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/rgb2spec.c.s
 .PHONY : src/rgb2spec.c.s
 
 src/shader.obj: src/shader.c.obj
@@ -407,7 +407,7 @@ src/shader.obj: src/shader.c.obj
 
 # target to build an object file
 src/shader.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/shader.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/shader.c.obj
 .PHONY : src/shader.c.obj
 
 src/shader.i: src/shader.c.i
@@ -415,7 +415,7 @@ src/shader.i: src/shader.c.i
 
 # target to preprocess a source file
 src/shader.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/shader.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/shader.c.i
 .PHONY : src/shader.c.i
 
 src/shader.s: src/shader.c.s
@@ -423,7 +423,7 @@ src/shader.s: src/shader.c.s
 
 # target to generate assembly for a file
 src/shader.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/shader.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/shader.c.s
 .PHONY : src/shader.c.s
 
 src/sphere.obj: src/sphere.c.obj
@@ -431,7 +431,7 @@ src/sphere.obj: src/sphere.c.obj
 
 # target to build an object file
 src/sphere.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/sphere.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/sphere.c.obj
 .PHONY : src/sphere.c.obj
 
 src/sphere.i: src/sphere.c.i
@@ -439,7 +439,7 @@ src/sphere.i: src/sphere.c.i
 
 # target to preprocess a source file
 src/sphere.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/sphere.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/sphere.c.i
 .PHONY : src/sphere.c.i
 
 src/sphere.s: src/sphere.c.s
@@ -447,7 +447,7 @@ src/sphere.s: src/sphere.c.s
 
 # target to generate assembly for a file
 src/sphere.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/sphere.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/sphere.c.s
 .PHONY : src/sphere.c.s
 
 src/stb_image.obj: src/stb_image.c.obj
@@ -455,7 +455,7 @@ src/stb_image.obj: src/stb_image.c.obj
 
 # target to build an object file
 src/stb_image.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/stb_image.c.obj
 .PHONY : src/stb_image.c.obj
 
 src/stb_image.i: src/stb_image.c.i
@@ -463,7 +463,7 @@ src/stb_image.i: src/stb_image.c.i
 
 # target to preprocess a source file
 src/stb_image.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/stb_image.c.i
 .PHONY : src/stb_image.c.i
 
 src/stb_image.s: src/stb_image.c.s
@@ -471,7 +471,7 @@ src/stb_image.s: src/stb_image.c.s
 
 # target to generate assembly for a file
 src/stb_image.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/stb_image.c.s
 .PHONY : src/stb_image.c.s
 
 src/stb_image_write.obj: src/stb_image_write.c.obj
@@ -479,7 +479,7 @@ src/stb_image_write.obj: src/stb_image_write.c.obj
 
 # target to build an object file
 src/stb_image_write.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image_write.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/stb_image_write.c.obj
 .PHONY : src/stb_image_write.c.obj
 
 src/stb_image_write.i: src/stb_image_write.c.i
@@ -487,7 +487,7 @@ src/stb_image_write.i: src/stb_image_write.c.i
 
 # target to preprocess a source file
 src/stb_image_write.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image_write.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/stb_image_write.c.i
 .PHONY : src/stb_image_write.c.i
 
 src/stb_image_write.s: src/stb_image_write.c.s
@@ -495,7 +495,7 @@ src/stb_image_write.s: src/stb_image_write.c.s
 
 # target to generate assembly for a file
 src/stb_image_write.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/stb_image_write.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/stb_image_write.c.s
 .PHONY : src/stb_image_write.c.s
 
 src/utils.obj: src/utils.c.obj
@@ -503,7 +503,7 @@ src/utils.obj: src/utils.c.obj
 
 # target to build an object file
 src/utils.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/utils.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/utils.c.obj
 .PHONY : src/utils.c.obj
 
 src/utils.i: src/utils.c.i
@@ -511,7 +511,7 @@ src/utils.i: src/utils.c.i
 
 # target to preprocess a source file
 src/utils.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/utils.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/utils.c.i
 .PHONY : src/utils.c.i
 
 src/utils.s: src/utils.c.s
@@ -519,7 +519,7 @@ src/utils.s: src/utils.c.s
 
 # target to generate assembly for a file
 src/utils.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/src/utils.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/src/utils.c.s
 .PHONY : src/utils.c.s
 
 # Help Target
@@ -538,7 +538,7 @@ help:
 	@echo ... rebuild_cache
 	@echo ... uninstall
 	@echo ... update_mappings
-	@echo ... Raytracer
+	@echo ... Pathtracer
 	@echo ... cglm
 	@echo ... glad
 	@echo ... glfw

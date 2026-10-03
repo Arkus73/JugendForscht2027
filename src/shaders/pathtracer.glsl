@@ -3,6 +3,8 @@
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (rgba32f, binding = 0) uniform image2D imgOutput;
 
+#define SPECTRAL_RESOLUTION 41
+
 struct Camera {
     // globale Position der Kamera
     vec3 center;
@@ -21,7 +23,7 @@ struct Material {
     vec2 roughness;
     float transmittance;
     float IOR;
-    float emissionSpectrum[3];
+    float emissionSpectrum[SPECTRAL_RESOLUTION];
 };
 
 struct Sphere {
@@ -54,24 +56,12 @@ struct HitInfo {
     vec3 normal;
 };
 
-uniform Camera cam;
-uniform ViewPlane viewplane;
-
 #define SPHERE_COUNT 1
 layout (std430, binding = 2) readonly buffer Spheres {
     vec4 sphereSpatialData[SPHERE_COUNT];
     Material sphereMaterials[SPHERE_COUNT];
 };
 
-#define CCW_WINDING_ORDER
-//#define CW_WINDING_ORDER
-//#define NO_CULLING
-#define CULLING
-
-#define PI 3.14159
-#define SQR(num) ((num) * (num))
-
-#define EPSILON 0.001
 #define MODEL_COUNT 8
 layout (std430, binding = 1) readonly buffer Models {
     ivec4 meshOffsetsAndVertexCounts[MODEL_COUNT];
@@ -81,17 +71,36 @@ layout (std430, binding = 1) readonly buffer Models {
     vec4 vertices[];
 };
 
+#define CCW_WINDING_ORDER
+//#define CW_WINDING_ORDER
+//#define NO_CULLING
+#define CULLING
+
+// Mathematik
+#define EPSILON 0.001
+#define PI 3.14159
+#define SQR(num) ((num) * (num))
+
+// Spektren
+uniform float MIN_WAVELENGTH;
+uniform float MAX_WAVELENGTH;
+uniform float WAVELENGTH_STEP;
+
 // Wird beim progressiven Rendering jeden Frame gewechselt, sodass die Zufallszahlen sich jeden Frame verändern
 uniform int frameSeed;
 uniform int maxBounceCount;
 uniform int samplesPerPixel;
 uniform int frameCount;
 
+uniform Camera cam;
+uniform ViewPlane viewplane;
+
 HitInfo intersectionSphere(Ray ray, Sphere sphere);
 HitInfo calculateClosestHit(Ray ray);
 // Generiert eine Zufallszahl ziwschen 0.0f und 1.0f
 float randf(inout uint state);
-vec3 traceRay(Ray ray, inout uint state);
+float traceRay(Ray ray, float lambda, inout uint state);
+vec3 CIE_XYZ_ColourMatchingFunction(float lambda);
 
 /* Bezug zur Rendergleichung:
 
@@ -128,8 +137,9 @@ void main() {
         vec3 globalPixelCoord = vec3((cam.transform * vec4(localPixelCoord, 1.0)).xyz);
         ray.dir = normalize(globalPixelCoord - cam.center);
 
-        totalLight += traceRay(ray, state);
-
+        float lambda = randf(state) * (MAX_WAVELENGTH - MIN_WAVELENGTH) + MIN_WAVELENGTH;
+        mat3 XYZ_to_RGB = mat3(vec3(3.24, -0.97, 0.055), vec3(-1.54, 1.88, -0.20), vec3(-0.50, 0.04, 1.06));
+        totalLight += (traceRay(ray, lambda, state) * (XYZ_to_RGB * CIE_XYZ_ColourMatchingFunction(lambda))) * (MAX_WAVELENGTH - MIN_WAVELENGTH);
     }
     vec3 pixelColour = totalLight / samplesPerPixel;
 
@@ -272,6 +282,7 @@ bool intersectionAABB(vec3 localRayOrigin, vec3 invLocalRayDir, AABB box) {
 HitInfo calculateClosestHit(Ray ray) {
 
     HitInfo closestHit;
+    closestHit.didHit = false;
     closestHit.dist = 100000.0;
     closestHit.material.albedoSpectrumCoeffs = vec3(0.0, 0.0, 0.0);
 
@@ -321,6 +332,7 @@ HitInfo calculateClosestHit(Ray ray) {
     return closestHit;
 }
 
+// PCG-Hash nach https://www.reedbeta.com/blog/hash-functions-for-gpu-rendering/ / https://www.shadertoy.com/view/ctj3Wc
 uint nextRandom(inout uint state) {
     state = state * 747796405u + 2891336453u;
     uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
@@ -436,10 +448,28 @@ float evalAlbedoSpectrum(vec3 albedoSpectrumCoeffs, float lambda) {
     return S(albedoSpectrumCoeffs.x * SQR(lambda) + albedoSpectrumCoeffs.y * lambda + albedoSpectrumCoeffs.z);
 }
 
-vec3 traceRay(Ray ray, inout uint state) {
+float evalEmissionSpectrum(float emissionSpectrum[SPECTRAL_RESOLUTION], float lambda) {
+    float relativeLambda = lambda - MIN_WAVELENGTH;
+    int lowerSampleIndex = min(int(floor(relativeLambda / WAVELENGTH_STEP)), SPECTRAL_RESOLUTION - 2);
+    return mix(emissionSpectrum[lowerSampleIndex], emissionSpectrum[lowerSampleIndex + 1], mod(relativeLambda, WAVELENGTH_STEP) / WAVELENGTH_STEP);
+}
 
-    vec3 throughput = vec3(1.0); // throughput entspricht einem Faktor, der den Grad der Modifierung des Lichts einer später getroffenen Lichtquelle über den Strahlenweg beschreibt. Er bestimmt maßgeblich den Einfluss der BRDF auf incomingLight
-    vec3 incomingLight = vec3(0.0); // incomingLight entspricht L(erster Schnittpunkt, -ray.dir), also dem Licht, das vom ersten Schnittpunkt Richtung Kamera emittiert und reflektiert wird 
+float gaussDistribution(float lambda, float my, float sigma) {
+    return exp(-0.5 * pow((lambda - my) / sigma, 2.0));
+}
+
+// Analytische Approximation nach https://jcgt.org/published/0002/02/01/
+vec3 CIE_XYZ_ColourMatchingFunction(float lambda) {
+    float x = 1.065 * gaussDistribution(lambda, 595.8, 33.33) + 0.366 * gaussDistribution(lambda, 446.8, 19.44);
+    float y = 1.014 * gaussDistribution(log(lambda), log(556.3), 0.075);
+    float z = 1.839 * gaussDistribution(log(lambda), log(449.8), 0.051);
+    return vec3(x, y, z);
+}
+
+float traceRay(Ray ray, float lambda, inout uint state) {
+
+    float throughput = 1.0; // throughput entspricht einem Faktor, der den Grad der Modifierung des Lichts einer später getroffenen Lichtquelle über den Strahlenweg beschreibt. Er bestimmt maßgeblich den Einfluss der BRDF auf incomingLight
+    float incomingLight = 0.0; // incomingLight entspricht L(erster Schnittpunkt, -ray.dir), also dem Licht, das vom ersten Schnittpunkt Richtung Kamera emittiert und reflektiert wird 
 
     for(int i = 0; i < maxBounceCount; i++) {
 
@@ -451,7 +481,7 @@ vec3 traceRay(Ray ray, inout uint state) {
             
             // Ist das Material eine Lichtquelle?
             if(material.emissionSpectrum[0] >= -EPSILON) {
-                vec3 emittedLight = vec3(material.emissionSpectrum[0], material.emissionSpectrum[1], material.emissionSpectrum[2]); // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir) des getroffenen Punktes
+                float emittedLight = evalEmissionSpectrum(material.emissionSpectrum, lambda); // emittedLight entspricht dem Le(hitInfo.hitPoint, -ray.dir) des getroffenen Punktes
                 incomingLight += throughput * emittedLight;
                 break;
             }
@@ -480,17 +510,18 @@ vec3 traceRay(Ray ray, inout uint state) {
             // Es wird eine zufällige Mikrofazettennormale generiert
             vec3 wm = sampleWm(wo, alpha, state);
 
-            vec3 albedo = vec3(evalAlbedoSpectrum(material.albedoSpectrumCoeffs, 700.0), evalAlbedoSpectrum(material.albedoSpectrumCoeffs, 540.0), evalAlbedoSpectrum(material.albedoSpectrumCoeffs, 460.0));
+            float albedo = evalAlbedoSpectrum(material.albedoSpectrumCoeffs, lambda);
+
             // BxDF und PDF aus https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory; Siehe Notizen für gekürzte Throughput-Weight Herleitungen
             if(material.transmittance < EPSILON) {
                 // BRDF
 
                 // Basisspekularreflexionsanteil bei Einfallswinkel 90°
-                vec3 F0 = mix(vec3(0.04), albedo, material.metallic);
+                float F0 = mix(0.04, albedo, material.metallic);
                 // Fresnel-Wert, also realistischer Spekularreflexionsanteil abhängig vom Einfallswinkel, Schlick-Approximation
-                vec3 F = F0 + (vec3(1.0) - F0) * pow(1.0 - min(dot(wm, wo), 1.0 - EPSILON), 5.0);
+                float F = F0 + (1.0 - F0) * pow(1.0 - min(dot(wm, wo), 1.0 - EPSILON), 5.0);
 
-                float pSpecular = dot(F, vec3(0.2126, 0.7152, 0.0722));
+                float pSpecular = F;
 
                 if(pSpecular < randf(state)) {
                     // Diffuse-Anteil nach Lambert
@@ -501,7 +532,7 @@ vec3 traceRay(Ray ray, inout uint state) {
                     // Specular-Anteil nach Torrance-Sparrow
                     // Lichteinfallsrichtung
                     vec3 wi = reflect(-wo, wm);    
-                    if(!sameHemisphere(wo, wi)) return vec3(0.0);
+                    if(!sameHemisphere(wo, wi)) return 0.0;
 
                     throughput *= (F * dot(wo, wm) * G(wi, wo, alpha)) / (G1(wo, alpha) * max(dot(wo, wm), 0.0) * pSpecular);
 

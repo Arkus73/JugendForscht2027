@@ -1,5 +1,5 @@
-prefix=C:/Program Files (x86)/Raytracer
-exec_prefix=C:/Program Files (x86)/Raytracer
+prefix=C:/Program Files (x86)/Pathtracer
+exec_prefix=C:/Program Files (x86)/Pathtracer
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 

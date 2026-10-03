@@ -22,8 +22,8 @@
 
 ### Erweiterung zum spektralen Path Tracing
 - [ X ] Ersatz der emissionColour des Material-Structs durch emissionSpectrum (ID: 16)
-- [  ] Implementierung eines Spectral Upsampling Verfahrens zur Rekonstruktion möglicher Albedospektren aus den Albedotripeln (ID: 17)
-- [  ] Vereinfachtes Wavelength Sampling und erste spektrale Renders (ID: 18)
+- [ X ] Implementierung eines Spectral Upsampling Verfahrens zur Rekonstruktion möglicher Albedospektren aus den Albedotripeln (ID: 17)
+- [ X ] Vereinfachtes Wavelength Sampling und erste spektrale Renders (ID: 18)
 - [  ] Verbessertes Wavelength Sampling (Hero Wavelength Sampling, Importance Sampling) (ID: 19)
 - [  ] Erweiterung des IOR zu Sellmeierkoeffizienten zur Simulation von Dispersion (ID: 20)
 
@@ -69,5 +69,6 @@
 - Eigenartig dunkle Akzente bei Glaswürfel. Vielleicht Strahl durch TIRs darin gefangen? -> Wahrscheinlicher Grund, kein Bug. Phänomen verschwindet bei erhöhter maxBounceCount
 - Backface Culling kompatibel mit polygonisch aufgebauten, refraktiven Materialien gemacht
 
-### [2026-09-21 bis] - Spektrales Path Tracing - [TODO ID 16]
+### [2026-09-21 bis] - Spektrales Path Tracing - [TODO ID 16, 17, 18]
 - Erweiterung des Materialmodells zur Annahme von Emissionsspektren statt Emissionsfarben und Löschen der emissionStrength
+- Implementierung des Spectral-Upsampling Verfahrens nach Jakob und Hanita (https://rgl.epfl.ch/publications/Jakob2019Spectral)

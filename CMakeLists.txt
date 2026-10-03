@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Raytracer)
+project(Pathtracer)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ add_subdirectory(external/glfw)
 add_subdirectory(external/cglm)
 
 # Executable
-add_executable(Raytracer
+add_executable(Pathtracer
     src/AABB.c
     src/dynamicArray.c
     src/main.c
@@ -35,13 +35,13 @@ add_executable(Raytracer
 )
 
 # Includes
-target_include_directories(Raytracer
+target_include_directories(Pathtracer
     PUBLIC external/glad/include/
     PUBLIC headers/
 )
 
 # Linken
-target_link_libraries(Raytracer
+target_link_libraries(Pathtracer
     glfw
     glad
     cglm

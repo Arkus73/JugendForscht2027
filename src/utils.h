@@ -5,9 +5,9 @@
 #include <stdbool.h>
 
 #define ASPECT_RATIO (16.0f / 9.0f)
-#define SPECTRAL_RESOLUTION (3)
-#define MIN_WAVELENGTH (400)
-#define MAX_WAVELENGTH (800)
+#define SPECTRAL_RESOLUTION (41)
+#define MIN_WAVELENGTH (360)
+#define MAX_WAVELENGTH (830)
 #define WAVELENGTH_STEP ((float)(MAX_WAVELENGTH - MIN_WAVELENGTH) / (float)(SPECTRAL_RESOLUTION - 1.0f))
 
 #define __cleanup(func) __attribute__((cleanup(func)))  // __cleanup bevor einer Pointer-Deklaration sorgt dafür, dass auf einen Pointer zu diesem Pointer die angegebene Funktion wird 

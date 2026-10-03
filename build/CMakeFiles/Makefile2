@@ -62,14 +62,14 @@ CMAKE_BINARY_DIR = C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\Juge
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/Raytracer.dir/all
+all: CMakeFiles/Pathtracer.dir/all
 all: external/glad/all
 all: external/glfw/all
 all: external/cglm/all
 .PHONY : all
 
 # The main recursive "codegen" target.
-codegen: CMakeFiles/Raytracer.dir/codegen
+codegen: CMakeFiles/Pathtracer.dir/codegen
 codegen: external/glad/codegen
 codegen: external/glfw/codegen
 codegen: external/cglm/codegen
@@ -82,7 +82,7 @@ preinstall: external/cglm/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/Raytracer.dir/clean
+clean: CMakeFiles/Pathtracer.dir/clean
 clean: external/glad/clean
 clean: external/glfw/clean
 clean: external/cglm/clean
@@ -167,38 +167,38 @@ external/glfw/src/clean: external/glfw/src/CMakeFiles/update_mappings.dir/clean
 .PHONY : external/glfw/src/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/Raytracer.dir
+# Target rules for target CMakeFiles/Pathtracer.dir
 
 # All Build rule for target.
-CMakeFiles/Raytracer.dir/all: external/glad/CMakeFiles/glad.dir/all
-CMakeFiles/Raytracer.dir/all: external/cglm/CMakeFiles/cglm.dir/all
-CMakeFiles/Raytracer.dir/all: external/glfw/src/CMakeFiles/glfw.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Built target Raytracer"
-.PHONY : CMakeFiles/Raytracer.dir/all
+CMakeFiles/Pathtracer.dir/all: external/glad/CMakeFiles/glad.dir/all
+CMakeFiles/Pathtracer.dir/all: external/glfw/src/CMakeFiles/glfw.dir/all
+CMakeFiles/Pathtracer.dir/all: external/cglm/CMakeFiles/cglm.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Built target Pathtracer"
+.PHONY : CMakeFiles/Pathtracer.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/Raytracer.dir/rule: cmake_check_build_system
+CMakeFiles/Pathtracer.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles 83
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Raytracer.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pathtracer.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles 0
-.PHONY : CMakeFiles/Raytracer.dir/rule
+.PHONY : CMakeFiles/Pathtracer.dir/rule
 
 # Convenience name for target.
-Raytracer: CMakeFiles/Raytracer.dir/rule
-.PHONY : Raytracer
+Pathtracer: CMakeFiles/Pathtracer.dir/rule
+.PHONY : Pathtracer
 
 # codegen rule for target.
-CMakeFiles/Raytracer.dir/codegen:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Finished codegen for target Raytracer"
-.PHONY : CMakeFiles/Raytracer.dir/codegen
+CMakeFiles/Pathtracer.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\shein\Documents\Coding\LowLevel\OpenGL\Projekte\JugendForscht2027\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Finished codegen for target Pathtracer"
+.PHONY : CMakeFiles/Pathtracer.dir/codegen
 
 # clean rule for target.
-CMakeFiles/Raytracer.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Raytracer.dir\build.make CMakeFiles/Raytracer.dir/clean
-.PHONY : CMakeFiles/Raytracer.dir/clean
+CMakeFiles/Pathtracer.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pathtracer.dir\build.make CMakeFiles/Pathtracer.dir/clean
+.PHONY : CMakeFiles/Pathtracer.dir/clean
 
 #=============================================================================
 # Target rules for target external/glad/CMakeFiles/glad.dir

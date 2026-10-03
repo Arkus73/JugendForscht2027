@@ -160,7 +160,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Raytracer
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Pathtracer
 
 //Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -216,7 +216,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Raytracer
+CMAKE_PROJECT_NAME:STATIC=Pathtracer
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=3.4.0
@@ -381,13 +381,13 @@ OPENGL_gl_LIBRARY:STRING=opengl32
 OPENGL_glu_LIBRARY:STRING=glu32
 
 //Value Computed by CMake
-Raytracer_BINARY_DIR:STATIC=C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build
+Pathtracer_BINARY_DIR:STATIC=C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build
 
 //Value Computed by CMake
-Raytracer_IS_TOP_LEVEL:STATIC=ON
+Pathtracer_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-Raytracer_SOURCE_DIR:STATIC=C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027
+Pathtracer_SOURCE_DIR:STATIC=C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027
 
 //Value Computed by CMake
 cglm_BINARY_DIR:STATIC=C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/external/cglm
@@ -641,5 +641,5 @@ OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
 //Have include xinput.h
 XINPUT_H_FOUND:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
-_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/Raytracer
+_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/Pathtracer
 

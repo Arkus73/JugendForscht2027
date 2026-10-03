@@ -1,4 +1,4 @@
-C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/CMakeFiles/Raytracer.dir
+C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/CMakeFiles/Pathtracer.dir
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/CMakeFiles/package.dir
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/CMakeFiles/package_source.dir
 C:/Users/shein/Documents/Coding/LowLevel/OpenGL/Projekte/JugendForscht2027/build/CMakeFiles/edit_cache.dir

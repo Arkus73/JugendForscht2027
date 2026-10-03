@@ -16,8 +16,8 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH (WINDOW_HEIGHT * ASPECT_RATIO)
 
-void render(Shader raytracer, unsigned int texture, int avgrRange, bool progressively);
-void renderVideo(Shader raytracer, unsigned int texture, int* frameCount, int frameCountPerVideoFrame, int* videoFrameCount, int FPS, float videoLength, GLFWwindow* window);
+void render(Shader pathtracer, unsigned int texture, int avgrRange, bool progressively);
+void renderVideo(Shader pathtracer, unsigned int texture, int* frameCount, int frameCountPerVideoFrame, int* videoFrameCount, int FPS, float videoLength, GLFWwindow* window);
 
 int main(int argc, char** argv) {
 
@@ -55,8 +55,8 @@ int main(int argc, char** argv) {
     useShader(quadShader);
     setInt(quadShader, "tex", 0);
 
-    Shader raytracer = createComputeShader("..\\src\\shaders\\raytracer.glsl");
-    useShader(raytracer);
+    Shader pathtracer = createComputeShader("..\\src\\shaders\\pathtracer.glsl");
+    useShader(pathtracer);
 
     // Viewplane-Werte werden aus Kamerawerten berechnet und an den Compute Shader gesendet
     float FOV = glm_rad(65.0f);
@@ -69,17 +69,17 @@ int main(int argc, char** argv) {
     float deltaV = -planeHeight / WINDOW_HEIGHT;
     float deltaU = planeWidth / WINDOW_WIDTH;
 
-    setVec3(raytracer, "viewplane.topLeftCorner", topLeftCorner);
-    setFloat(raytracer, "viewplane.deltaU", deltaU);
-    setFloat(raytracer, "viewplane.deltaV", deltaV);
+    setVec3(pathtracer, "viewplane.topLeftCorner", topLeftCorner);
+    setFloat(pathtracer, "viewplane.deltaU", deltaU);
+    setFloat(pathtracer, "viewplane.deltaV", deltaV);
 
     // Nötige Kameradaten werden an den Shader geschickt
     vec3 camCenter = {3.0f, 0.0f, 14.9f};
-    setVec3(raytracer, "cam.center", camCenter);
+    setVec3(pathtracer, "cam.center", camCenter);
     mat4 camTransform;
     glm_lookat(camCenter, (vec3) {0.0f, 0.0f, 0.0f}, (vec3) {0.0f, 1.0f, 0.0f}, camTransform);
     glm_mat4_inv(camTransform, camTransform);
-    setMatrix(raytracer, "cam.transform", camTransform);
+    setMatrix(pathtracer, "cam.transform", camTransform);
 
     // Szene wird definiert
 
@@ -90,11 +90,11 @@ int main(int argc, char** argv) {
     float darkSpectrum[SPECTRAL_RESOLUTION], brightSpectrum[SPECTRAL_RESOLUTION];
     for(int i = 0; i < SPECTRAL_RESOLUTION; i++) {
         darkSpectrum[i] = 0.0f;
-        brightSpectrum[i] = 17.5f;
+        brightSpectrum[i] = 0.13f;
     }
     darkSpectrum[0] = -1.0f; // Kennzeichen eines nicht leutenden Materials
 
-    // LUT zur Überführung der RGB-Farben in Spektrumskoeffizienten wird geladen
+    // LUT zur Überführung der RGB-Farben in Spektrumskoeffizienten wird geladen und angwendet
     RGB2Spec* LUT = rgb2spec_load("..\\input\\srgb.coeff");
 
     vec3 redCoeff, greenCoeff, blueCoeff, bleenCoeff, whiteCoeff;
@@ -104,6 +104,7 @@ int main(int argc, char** argv) {
     rgb2spec_fetch(LUT, BLEEN, bleenCoeff);
     rgb2spec_fetch(LUT, WHITE, whiteCoeff);
 
+    // Definition der Material-Blueprints
     Material* lightMaterial = createMaterial(whiteCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, brightSpectrum, NULL, materialInstanceTracker);
     Material* whiteMaterial = createMaterial(whiteCoeff, (vec2) {1.0f, 1.0f}, 0.0f, 0.0f, 1.0f, darkSpectrum, NULL, materialInstanceTracker);
     Material* refractiveMaterial = createMaterial(whiteCoeff, (vec2) {0.0f, 0.0f}, 0.0f, 1.0f, 2.0f, darkSpectrum, NULL, materialInstanceTracker);
@@ -114,8 +115,10 @@ int main(int argc, char** argv) {
 
     rgb2spec_free(LUT);
 
+    // Definitiong der Spheres
     Sphere* sphere = createSphere((vec3) {0.0f, 0.0f, 10.0f}, 1.0f, refractiveMaterial, false, sphereInstanceTracker);
 
+    // Upload der Spheres
     unsigned int sphereSSBO = prepareSphereSSBO(sphereInstanceTracker);
     uploadAllSpheres(sphereInstanceTracker, sphereSSBO);
     disposeStaticSpheres(sphereInstanceTracker);
@@ -173,6 +176,7 @@ int main(int argc, char** argv) {
         -0.5f,  0.5f, -0.5f, 1.0f
     };
 
+    // Definition der Models
     Model* lightSource = createModel(modelInstanceTracker, vertices, 36, lightMaterial, (vec3) {0.0f, 9.75f, 0.0f}, (vec3) {7.0f, 0.5f, 7.0f}, false);
 
     Model* backWall = createModel(modelInstanceTracker, vertices, 36, whiteMaterial, (vec3) {0.0f, 0.0f, -15.5f}, (vec3) {20.0f, 20.0f, 1.0f}, false);
@@ -186,18 +190,22 @@ int main(int argc, char** argv) {
 
     Model* refractiveCube = createModel(modelInstanceTracker, vertices, 36, bleenMaterial, (vec3) {0.0f, 0.0f, 5.0f}, (vec3) {1.0f, 1.0f, 1.0f}, false);
 
+    // Upload der Models
     unsigned int modelSSBO = prepareModelSSBO(modelInstanceTracker);
-
     uploadAllModels(modelInstanceTracker, modelSSBO);
     disposeStaticModels(modelInstanceTracker);
 
     disposeMaterialBlueprints(materialInstanceTracker);
 
-    // Sonstige Uniforms werden festgelegt
-    setInt(raytracer, "maxBounceCount", 6);
-    setInt(raytracer, "samplesPerPixel", 16);
+    // Wichtige Render- und Wellenlängen-Konstanten werden festgelegt
+    setInt(pathtracer, "maxBounceCount", 6);
+    setInt(pathtracer, "samplesPerPixel", 16);
 
-    // Textur, die vom Raytracer bearbeitet und später dargestellt wird
+    setFloat(pathtracer, "MIN_WAVELENGTH", (float) MIN_WAVELENGTH);
+    setFloat(pathtracer, "MAX_WAVELENGTH", (float) MAX_WAVELENGTH);
+    setFloat(pathtracer, "WAVELENGTH_STEP", WAVELENGTH_STEP);
+
+    // Textur, die vom Path-Tracer bearbeitet und später dargestellt wird
     unsigned int texture;
     glGenTextures(1, &texture);
     glActiveTexture(GL_TEXTURE0);
@@ -220,10 +228,10 @@ int main(int argc, char** argv) {
         float delta = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        useShader(raytracer);
-        render(raytracer, texture, frameCount, true);
+        useShader(pathtracer);
+        render(pathtracer, texture, frameCount, true);
         frameCount++;
-        //printf("%d\n", frameCount);
+        printf("%d\n", frameCount);
         //renderVideo(raytracer, texture, &frameCount, 512, &videoFrameCount, 1, 1.0f, window);
 
         // Der vorgerenderte Frame wird auf einem Quad dargestellt
@@ -240,19 +248,18 @@ int main(int argc, char** argv) {
     glDeleteVertexArrays(1, &VAO);
     glDeleteTextures(1, &texture);
     glDeleteProgram(quadShader.ID);
-    glDeleteProgram(raytracer.ID);
+    glDeleteProgram(pathtracer.ID);
 
     deinitModelInstanceTracker(modelInstanceTracker);
-    destroyDynamicArray(materialInstanceTracker);
-    destroyDynamicArray(sphereInstanceTracker);
+    destroyAllSpheres(sphereInstanceTracker);
 
-    glfwTerminate();
     glfwDestroyWindow(window);
+    glfwTerminate();
 
     return EXIT_SUCCESS;
 }
 
-//                                                                    v Menge an vorherigen Frames, über die interpoliert werden soll
+//                                                          v Menge an vorherigen Frames, über die interpoliert werden soll
 void render(Shader raytracer, unsigned int texture, int avgrRange, bool progressively) {
     // Der Frame wird vom Raytracer auf die Textur gerendert
     static int staticSeed = 0;
